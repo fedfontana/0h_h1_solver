@@ -1,38 +1,21 @@
-# create-svelte
+# 0h h1 solver
 
-Everything you need to build a Svelte project, powered by [`create-svelte`](https://github.com/sveltejs/kit/tree/master/packages/create-svelte).
+[0h h1](https://0hh1.com) solver.
 
-## Creating a project
+## TODO
 
-If you're seeing this, you've probably already done this step. Congrats!
-
-```bash
-# create a new project in the current directory
-npm init svelte
-
-# create a new project in my-app
-npm init svelte my-app
-```
-
-## Developing
-
-Once you've created a project and installed dependencies with `npm install` (or `pnpm install` or `yarn`), start a development server:
-
-```bash
-npm run dev
-
-# or start the server and open the app in a new browser tab
-npm run dev -- --open
-```
-
-## Building
-
-To create a production version of your app:
-
-```bash
-npm run build
-```
-
-You can preview the production build with `npm run preview`.
-
-> To deploy your app, you may need to install an [adapter](https://kit.svelte.dev/docs/adapters) for your target environment.
+- add typescript
+- dark mode
+- use same font as [0hh1.com](0hh1.com) - JosefinSans-Bold
+- maybe add possibilty to highlight initial state (easier way to copy solution)
+- beffer ukrainian flag shades
+- add share button with permalink (and `/puzzle/<repr>` route)
+- add "check solution" button
+- add title
+- better error popup (sticky on top right)
+- better button position (lateral buttons on desktop)
+- better size selection buttons
+- fix size issues (12x12 is way too big)
+- change things so that right click in the middle of the tiles doesnt bring up context menu
+    - either preventDefault on contextmenu on all of the main Board div 
+	- or use padding instead of gap? (with second option, even a slightly missed click would result in a successfull tile coloring)

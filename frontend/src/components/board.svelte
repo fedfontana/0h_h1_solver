@@ -23,7 +23,8 @@
 				<div
 					class={`${
 						tile == 'y' ? 'bg-yellow-500' : tile == 'b' ? 'bg-blue-500' : 'bg-neutral-700'
-					} w-32 h-32 flex items-center justify-center rounded-xl shadow-lg text-xl font-bold uppercase hover:opacity-80 hover:scale-[98%]`}
+					} w-32 h-32 flex items-center justify-center rounded-xl shadow-lg text-xl font-bold uppercase hover:opacity-80 hover:scale-[98%]
+					transition-colors duration-200`}
 				    on:click={() => clickHandler(row_idx, col_idx, false)}
                     on:contextmenu|preventDefault={() => clickHandler(row_idx, col_idx, true)}
                 />
