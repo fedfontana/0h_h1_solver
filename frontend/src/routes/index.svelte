@@ -1,23 +1,16 @@
 <script>
 	import Board from '../components/board.svelte';
-
+	import Pill from '../components/pill.svelte';
+	import { encodeBoardState, decodeBoardState, generateEmptyBoard } from '../lib/utils';
 	const API_URL = 'http://localhost:5000';
+	const WEBSITE_URL = 'http://localhost:3000';
 
-	const SIZES = [4, 6, 8, 10, 12]
-	let selected_size = 4
+	const SIZES = [4, 6, 8, 10, 12];
+	let selected_size = 4;
 
 	let error_msg = null;
 
 	let board_state = generateEmptyBoard(selected_size);
-
-	function encodeBoardState(board_state) {
-		return board_state.map(row => row.join(' ')).join(' | ');
-	}
-
-	function decodeBoardState(encoding) {
-		let encoded_rows = encoding.split(' | ')
-		return encoded_rows.map(encoded_row => encoded_row.split(' '));
-	}
 
 	async function findSolutionHandler() {
 		let response = await fetch(`${API_URL}/get_solution/${encodeBoardState(board_state)}`);
@@ -29,54 +22,72 @@
 			return;
 		}
 		if (!response.ok) {
-            // catch all of the unhandled errors
+			// catch all of the unhandled errors
 			error_msg = 'Something went wrong. Please try again.';
 			return;
 		}
 		board_state = decodeBoardState(JSONRes.solution);
 	}
-
-	function generateEmptyBoard(size) {
-		let tmp = []
-		for(let i = 0; i < size; i++) {
-			let row = []
-			for(let j = 0; j < size; j++)
-				row.push('x');
-			tmp.push(row);
-		}
-		return tmp;
-	}
 </script>
 
-<div class="w-full h-full flex flex-col items-center justify-center gap-10">
+<div class="relative w-full h-full flex flex-col items-center justify-center gap-32 md:flex-row">
 	{#if error_msg != null}
-		<div class="bg-red-500 text-xl">
-			{error_msg}
-			<button
-				class="px-6 py-2 bg-red-200 hover:opacity-80 hover:scale-[98%]"
-				on:click={() => {
-					error_msg = null;
-				}}>close</button
-			>
+		<div class="fixed right-10 top-10">
+			<Pill clickHandler={() => {
+				error_msg = null;
+			}}
+			content={error_msg}
+			buttonText="close"/>
 		</div>
 	{/if}
 	<div>
-		{#each SIZES as size}
-			<button class="m-4 " on:click={() => {selected_size=size; board_state = generateEmptyBoard(size)}}>
-				<p class="text-3xl font-semibold shadow-xl">
-					{size}x{size}
-				</p>
+		<div class="flex flex-row md:flex-col">
+			{#each SIZES as size}
+				<button
+					class={`m-3 hover:opacity-50 hover:bg-neutral-300 ${selected_size == size ? "bg-neutral-300 bg-opacity-70" : ""} p-1 rounded-lg`}
+					on:click={() => {
+						selected_size = size;
+						board_state = generateEmptyBoard(size);
+						error_msg = null;
+					}}
+				>
+					<p class="text-3xl font-semibold">
+						{size}x{size}
+					</p>
+				</button>
+			{/each}
+		</div>
+		<div class="flex flex-row md:flex-col gap-4">
+			<button
+				class="px-6 py-2 bg-blue-500 hover:opacity-80 hover:scale-[98%] shadow-md rounded-lg text-lg font-bold"
+				on:click={findSolutionHandler}>solve</button
+			>
+			<button
+				class="px-6 py-2 bg-green-500 hover:opacity-80 hover:scale-[98%] shadow-md rounded-lg text-lg font-bold"
+			>
+				check
 			</button>
-		{/each}
+			<button
+				class="px-6 py-2 bg-red-500 hover:opacity-80 hover:scale-[98%] shadow-md rounded-lg text-lg font-bold"
+				on:click={() => {
+					board_state = generateEmptyBoard(selected_size);
+					error_msg = null;
+				}}>clear</button
+			>
+		</div>
+		<div class="mt-4 flex flex-col gap-2">
+			<h3 class="font-semibold text-lg">
+				share this puzzle:
+			</h3>
+			<div class="max-w-md flex">
+				<input type="text" readonly class="rounded-l-md pl-4 py-2 bg-neutral-200 text-ellipsis" value={`${WEBSITE_URL}/board/${encodeBoardState(board_state)}`}>
+				<button class="bg-neutral-500 px-3 rounded-r-md">cp</button>
+			</div>
+		</div>
 	</div>
 
-	<Board bind:board_state />
-	<button
-		class="px-6 py-2 bg-blue-500 hover:opacity-80 hover:scale-[98%] shadow-md rounded-lg text-lg"
-		on:click={findSolutionHandler}>find solution</button
-	>
-	<button
-		class="px-6 py-2 bg-red-500 hover:opacity-80 hover:scale-[98%] shadow-md rounded-lg text-md"
-		on:click={() => {board_state = generateEmptyBoard(selected_size)}}>clear</button
-	>
+	<div class="flex flex-col gap-20">
+		<h1 class="text-8xl font-bold">0h h1 solver</h1>
+		<Board bind:board_state />
+	</div>
 </div>

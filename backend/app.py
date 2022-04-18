@@ -10,7 +10,7 @@ CORS(app)
 @app.route("/get_solution/<string:encoded_board_state>")
 def find_solution(encoded_board_state: str):
     try:
-        board: Board = Board.parse_string(encoded_board_state)
+        board: Board = Board.decode(encoded_board_state)
     except ValueError:
         return {"error_message": "Bad board string encoding."}, 400
 

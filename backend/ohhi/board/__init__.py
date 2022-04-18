@@ -4,11 +4,28 @@ from typing_extensions import Self
 import rich
 import numpy as np
 
-from ohhi.board.utils import rows_are_equal
+from ohhi.board import utils
 class Tile(enum.Enum):
     Empty = 1
     Blue = 2
     Yellow = 3
+
+    def to_string(self) -> str:
+        if self == Tile.Blue:
+            return 'b'
+        elif self == Tile.Yellow:
+            return 'y'
+        elif self == Tile.Empty:
+            return 'x'
+
+def string_to_tile(tile: str) -> Self:
+        if tile == 'b':
+            return Tile.Blue
+        elif tile == 'y':
+            return Tile.Yellow
+        elif tile == 'x':
+            return Tile.Empty
+        raise ValueError(f'Input string malformed. Character "{tile}" isn\'t a valid tile representation.')
 
 class Board:
     def __init__(self, initial_state: np.array):
@@ -61,50 +78,39 @@ class Board:
         # check no repeated rows
         for i, row1 in enumerate(state):
             for j, row2 in enumerate(state):
-                if i != j and rows_are_equal(row1, row2):
+                if i != j and utils.rows_are_equal(row1, row2):
                     if debug:
                         print("Discarding current solution because it contains two copies of the same row/column.")
                     return False
         
         return True
 
-    #Takes a string like "x x x x | y x x y | x b x y | b x x x" and returns the corrisponding board representation
+    # Parses a string like "x x x x | y x x y | x b x y | b x x x" and returns the corrisponding board representation
     @staticmethod
     def parse_string(input_string: str) -> Self:
         matrix = []
-        for row in input_string.split('|'):
-            elems = [elem.strip() for elem in row.strip().split(" ")]
-            row = []
-            for tile in elems:
-                if tile == 'b':
-                    row.append(Tile.Blue)
-                elif tile == 'y':
-                    row.append(Tile.Yellow)
-                elif tile == 'x':
-                    row.append(Tile.Empty)
-                else:
-                    raise ValueError(f'Input string malformed. Character "{tile}" not valid')
-            matrix.append(row)
+        for row in input_string.split(' | '):
+            matrix.append([string_to_tile(token.strip()) for token in row.strip().split(" ")])
 
         state = np.array(matrix)
-        if len(state.shape) != 2 or state.shape[0] != state.shape[1]:
-            raise ValueError("Input string not valid. Board sizes mismatch")
-
         return Board(state)
 
+    # Encoded the current state in a string of type xxby-xbby-xybb-xxxx
     def encode(self) -> str:
         rows = []
         for row in self.state:
-            current_row  = []
-            for tile in row:
-                if tile == Tile.Yellow:
-                    current_row.append("y")
-                elif tile == Tile.Blue:
-                    current_row.append("b")
-                elif tile == Tile.Empty:
-                    current_row.append("x")
-            rows.append(" ".join(current_row))
-        return " | ".join(rows)
+            rows.append("".join([tile.to_string() for tile in row]))
+        return "-".join(rows)
+
+    # Decodes a string of type xxby-xbby-xybb-xxxx into a Board object
+    @staticmethod
+    def decode(input_string: str) -> Self:
+        matrix = []
+        for row in input_string.split('-'):
+            matrix.append([string_to_tile(token) for token in row.strip()])
+
+        state = np.array(matrix)
+        return Board(state)        
 
 
     def pretty_print(self) -> None:
@@ -125,12 +131,12 @@ class Board:
         representation: str = ""
         for row in self.state:
             representation = representation + "[" 
-            for cell in row[:-1]:
-                if cell == Tile.Empty:
+            for tile in row[:-1]:
+                if tile == Tile.Empty:
                         representation += "   |"
-                elif cell == Tile.Blue:
+                elif tile == Tile.Blue:
                         representation += " B |"
-                elif cell == Tile.Yellow:
+                elif tile == Tile.Yellow:
                         representation += " Y |"
 
                 #! py >= 3.10
