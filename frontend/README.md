@@ -30,6 +30,7 @@ functionality stuff
   - keyboard shortcuts info
 
 code stuff
+- `WEBSITE_URL` may be useless, just get the url from the sveltekit store (`$page.something.somethingelse`?)
 
 utility stuff
 - cltr+l clears the board
