@@ -11,16 +11,32 @@
             board_state[row_idx][col_idx] = isRightClick ? "b" : "y";
         }
     }
+
+	const gap_sizes = {
+		"4": 5,
+		"6": 4,
+		"8": 2,
+		"10": 2,
+		"12": 1
+	};
+
+	const rounded_size = {
+		"4": "3xl",
+		"6": "2xl",
+		"8": "2xl",
+		"10": "xl",
+		"12": "xl"
+	};
 </script>
 
-<div class="flex flex-col gap-4">
+<div class={`flex flex-col h-[30vw] w-[30vw] justify-between gap-y-${gap_sizes[board_state.length]}`}>
 	{#each board_state as row, row_idx}
-		<div class="flex flex-row gap-4">
+		<div class={`flex flex-row w-[30vw] justify-between flex-1 gap-x-${gap_sizes[board_state.length]}`}>
 			{#each row as tile, col_idx}
 				<div
 					class={`${
 						tile == 'y' ? 'bg-yellow-500' : tile == 'b' ? 'bg-blue-500' : 'bg-neutral-700'
-					} w-32 h-32 flex items-center justify-center rounded-xl shadow-lg text-xl font-bold uppercase hover:opacity-80 hover:scale-[98%]
+					} flex-1 rounded-${rounded_size[board_state.length]} shadow-lg hover:opacity-80 hover:scale-[98%]
 					transition-colors duration-200`}
 				    on:click={() => clickHandler(row_idx, col_idx, false)}
                     on:contextmenu|preventDefault={() => clickHandler(row_idx, col_idx, true)}

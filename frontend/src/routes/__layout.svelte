@@ -169,7 +169,7 @@
 		</div>
 	</div>
 
-	<div class="flex flex-col gap-20">
+	<div class="flex flex-col gap-20 w-[40%]">
 		<h1 class="text-8xl font-bold"><a href="/">0h h1 solver</a></h1>
 		<slot />
 	</div>
