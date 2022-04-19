@@ -28,7 +28,6 @@ functionality stuff
   - keyboard shortcuts info
 
 code stuff
-- add vite `$lib/$src/$components` stuff
 - !!! move stuff to __layout and stores.js
 
 utility stuff

@@ -18,6 +18,7 @@ const config = {
                     $components: path.resolve('./src/components/'),
                     $src: path.resolve('./src/'),
                     $types: path.resolve('./src/types/'),
+                    $lib: path.resolve('./src/lib/'),
                 }
             }
 

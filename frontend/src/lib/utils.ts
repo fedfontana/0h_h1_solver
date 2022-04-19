@@ -1,4 +1,4 @@
-import type { Tile, Board, BoardSize } from '../types';
+import type { Tile, Board, BoardSize } from '$src/types';
 
 export function encodeBoardState(board_state: Board): string {
     return board_state.map((row) => row.join('')).join('-');

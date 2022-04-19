@@ -1,5 +1,5 @@
 <script lang="ts">
-	import {generateEmptyBoard} from '../lib/utils';
+	import {generateEmptyBoard} from '$src/lib/utils';
 	export let board_state = generateEmptyBoard(4);
 
     function clickHandler(row_idx: number, col_idx: number, isRightClick: boolean): void {

@@ -48,7 +48,13 @@
 			],
 			"$types/*": [
 				"src/types/*"
-			]
+			],
+			"$lib": [
+				"lib"
+			],
+			"$lib/*": [
+				"lib/*"
+			],
 		}
 	},
 	"include": [

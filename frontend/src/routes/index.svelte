@@ -1,10 +1,10 @@
 <script lang="ts">
-	import CopyInput from '../components/copy_input.svelte';
-	import Board from '../components/board.svelte';
-	import Toast from '../components/toast.svelte';
-	import Button from '../components/button.svelte';
-	import type {Board as BoardType, BoardSize, SolutionResponse, ErrorResponse, CheckSolutionResponse } from '../types';
-	import { encodeBoardState, decodeBoardState, generateEmptyBoard } from '../lib/utils';
+	import CopyInput from '$components/copy_input.svelte';
+	import Board from '$components/board.svelte';
+	import Toast from '$components/toast.svelte';
+	import Button from '$components/button.svelte';
+	import type {Board as BoardType, BoardSize, SolutionResponse, ErrorResponse, CheckSolutionResponse } from '$src/types';
+	import { encodeBoardState, decodeBoardState, generateEmptyBoard } from '$src/lib/utils';
 	const API_URL = 'http://localhost:5000';
 	const WEBSITE_URL = 'http://localhost:3000';
 

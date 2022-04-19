@@ -1,6 +1,6 @@
 <script lang="ts">
 	import { fade } from 'svelte/transition';
-	import type { ToastType } from '../types';
+	import type { ToastType } from '$src/types';
 
 	export let type: ToastType  = 'error';
 	export let clickHandler: () => void;
