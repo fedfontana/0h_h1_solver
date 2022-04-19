@@ -8,4 +8,6 @@
     let board_state: BoardType = decodeBoardState(encoded_board)
 </script>
 
-<Board bind:board_state />
+<div class="h-[30vw] w-[30vw]">
+    <Board bind:board_state />
+</div>

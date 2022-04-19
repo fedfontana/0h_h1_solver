@@ -29,9 +29,9 @@
 	};
 </script>
 
-<div class={`flex flex-col h-[30vw] w-[30vw] justify-between gap-y-${gap_sizes[board_state.length]}`}>
+<div class={`flex flex-col h-full w-full justify-between gap-y-${gap_sizes[board_state.length]}`}>
 	{#each board_state as row, row_idx}
-		<div class={`flex flex-row w-[30vw] justify-between flex-1 gap-x-${gap_sizes[board_state.length]}`}>
+		<div class={`flex flex-row w-full justify-between flex-1 gap-x-${gap_sizes[board_state.length]}`}>
 			{#each row as tile, col_idx}
 				<div
 					class={`${

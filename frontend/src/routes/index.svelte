@@ -8,4 +8,6 @@
 	})
 </script>
 
-<Board bind:board_state={$board_state} />
+<div class="h-[30vw] w-[30vw]">
+	<Board bind:board_state={$board_state} />
+</div>
