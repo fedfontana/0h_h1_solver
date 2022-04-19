@@ -21,6 +21,14 @@ def find_solution(encoded_board_state: str):
 
     return {"solution": solution}
 
+@app.route("/check_solution/<string:encoded_board_state>")
+def check_solution(encoded_board_state: str):
+    try:
+        board: Board = Board.decode(encoded_board_state)
+    except ValueError:
+        return {"error_message": "Bad board string encoding."}, 400
+
+    return {"is_solution": board.is_solution()}
 
 if __name__ == "__main__":
     app.run()

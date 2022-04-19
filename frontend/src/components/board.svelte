@@ -1,9 +1,6 @@
 <script>
-	export let board_state = [
-		['y', 'b'],
-		['b', 'y']
-	];
-
+	import {generateEmptyBoard} from '../lib/utils';
+	export let board_state = generateEmptyBoard(4);
 
     function clickHandler(row_idx, col_idx, isRightClick) {
         if(board_state[row_idx][col_idx] == "y") {

@@ -1,5 +1,6 @@
 <script>
 	import { fade } from 'svelte/transition';
+
 	export let type = 'error'; // error | info | success
 	export let clickHandler;
 	export let content = '';

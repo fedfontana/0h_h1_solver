@@ -1,6 +1,7 @@
 <script>
+	import CopyInput from '../components/copy_input.svelte';
 	import Board from '../components/board.svelte';
-	import Pill from '../components/pill.svelte';
+	import Toast from '../components/toast.svelte';
 	import { encodeBoardState, decodeBoardState, generateEmptyBoard } from '../lib/utils';
 	const API_URL = 'http://localhost:5000';
 	const WEBSITE_URL = 'http://localhost:3000';
@@ -9,6 +10,9 @@
 	let selected_size = 4;
 
 	let error_msg = null;
+	let info_msg = null;
+
+	let is_solution = null;
 
 	let board_state = generateEmptyBoard(selected_size);
 
@@ -28,27 +32,97 @@
 		}
 		board_state = decodeBoardState(JSONRes.solution);
 	}
+
+	function isBoardFull(board_state) {
+		for(let row of board_state) {
+			for(let tile of row) {
+				if(tile == 'x') return false;
+			}
+		}
+		return true;
+	}
+
+	async function checkSolutionHandler() {
+		if(!isBoardFull(board_state)) {
+			info_msg = "Please fill the board before checking the solution.";
+			return
+		}
+		let response = await fetch(`${API_URL}/check_solution/${encodeBoardState(board_state)}`);
+		let JSONRes = await response.json();
+		if (!response.ok) {
+			// catch all of the unhandled errors
+			error_msg = 'Something went wrong. Please try again.';
+			return;
+		}
+		is_solution = JSONRes.is_solution;
+	}
 </script>
 
 <div class="relative w-full h-full flex flex-col items-center justify-center gap-32 md:flex-row">
 	{#if error_msg != null}
 		<div class="fixed right-10 top-10">
-			<Pill clickHandler={() => {
-				error_msg = null;
-			}}
-			content={error_msg}
-			buttonText="close"/>
+			<Toast
+				clickHandler={() => {
+					error_msg = null;
+					info_msg = null;
+				}}
+				content={error_msg}
+				buttonText="close"
+			/>
 		</div>
 	{/if}
+	{#if info_msg != null}
+		<div class="fixed right-10 top-10">
+			<Toast
+				type="info"
+				clickHandler={() => {
+					error_msg = null;
+					info_msg = null;
+				}}
+				content={info_msg}
+				buttonText="close"
+			/>
+		</div>
+	{/if}
+	{#if is_solution == true}
+		<div class="fixed right-10 top-10">
+			<Toast
+				type="success"
+				clickHandler={() => {
+					is_solution = null;
+					info_msg = null;
+					error_msg = null;
+				}}
+				content="Your solution is correct!"
+				buttonText="close"
+			/>
+		</div>
+	{:else if is_solution == false}
+		<div class="fixed right-10 top-10">
+			<Toast
+				clickHandler={() => {
+					is_solution = null;
+					info_msg = null;
+					error_msg = null;
+				}}
+				content="Your solution is wrong."
+				buttonText="close"
+			/>
+		</div>
+	{/if}
+
 	<div>
 		<div class="flex flex-row md:flex-col">
 			{#each SIZES as size}
 				<button
-					class={`m-3 hover:opacity-50 hover:bg-neutral-300 ${selected_size == size ? "bg-neutral-300 bg-opacity-70" : ""} p-1 rounded-lg`}
+					class={`m-3 hover:opacity-50 hover:bg-neutral-300 ${
+						selected_size == size ? 'bg-neutral-300 bg-opacity-70' : ''
+					} p-1 rounded-lg`}
 					on:click={() => {
 						selected_size = size;
 						board_state = generateEmptyBoard(size);
 						error_msg = null;
+						info_msg = null;
 					}}
 				>
 					<p class="text-3xl font-semibold">
@@ -60,29 +134,31 @@
 		<div class="flex flex-row md:flex-col gap-4">
 			<button
 				class="px-6 py-2 bg-blue-500 hover:opacity-80 hover:scale-[98%] shadow-md rounded-lg text-lg font-bold"
-				on:click={findSolutionHandler}>solve</button
+				on:click={() => {
+					error_msg = null;
+					findSolutionHandler();
+				}}>solve</button
 			>
 			<button
 				class="px-6 py-2 bg-green-500 hover:opacity-80 hover:scale-[98%] shadow-md rounded-lg text-lg font-bold"
+				on:click={() => {
+					error_msg = null;
+					checkSolutionHandler();
+				}}
 			>
 				check
 			</button>
 			<button
 				class="px-6 py-2 bg-red-500 hover:opacity-80 hover:scale-[98%] shadow-md rounded-lg text-lg font-bold"
 				on:click={() => {
-					board_state = generateEmptyBoard(selected_size);
 					error_msg = null;
+					board_state = generateEmptyBoard(selected_size);
 				}}>clear</button
 			>
 		</div>
 		<div class="mt-4 flex flex-col gap-2">
-			<h3 class="font-semibold text-lg">
-				share this puzzle:
-			</h3>
-			<div class="max-w-md flex">
-				<input type="text" readonly class="rounded-l-md pl-4 py-2 bg-neutral-200 text-ellipsis" value={`${WEBSITE_URL}/board/${encodeBoardState(board_state)}`}>
-				<button class="bg-neutral-500 px-3 rounded-r-md">cp</button>
-			</div>
+			<h3 class="font-semibold text-lg">share this puzzle:</h3>
+			<CopyInput content={`${WEBSITE_URL}/board/${encodeBoardState(board_state)}`}/>
 		</div>
 	</div>
 
