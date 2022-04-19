@@ -29,13 +29,15 @@
 	};
 </script>
 
-<div class={`flex flex-col h-full w-full justify-between gap-y-${gap_sizes[board_state.length]}`}>
+<div class={`flex flex-col h-full w-full justify-between gap-y-${gap_sizes[board_state.length]}`}
+	on:contextmenu|preventDefault
+>
 	{#each board_state as row, row_idx}
 		<div class={`flex flex-row w-full justify-between flex-1 gap-x-${gap_sizes[board_state.length]}`}>
 			{#each row as tile, col_idx}
 				<div
 					class={`${
-						tile == 'y' ? 'bg-yellow-500' : tile == 'b' ? 'bg-blue-500' : 'bg-neutral-700'
+						tile == 'y' ? 'bg-[#ffd700]' : tile == 'b' ? 'bg-[#0057b7]' : 'bg-neutral-700'
 					} flex-1 rounded-${rounded_size[board_state.length]} shadow-lg hover:opacity-80 hover:scale-[98%]
 					transition-colors duration-200`}
 				    on:click={() => clickHandler(row_idx, col_idx, false)}
