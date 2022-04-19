@@ -1,0 +1,12 @@
+<script lang="ts">
+	export let clickHandler: () => void;
+	export let content: string;
+	export let color: string;
+</script>
+
+<button
+	class={`px-6 py-2 ${color} hover:opacity-80 hover:scale-[98%] shadow-md rounded-lg text-lg font-bold`}
+	on:click={clickHandler}
+>
+	{content}
+</button>

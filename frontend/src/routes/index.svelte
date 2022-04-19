@@ -2,6 +2,7 @@
 	import CopyInput from '../components/copy_input.svelte';
 	import Board from '../components/board.svelte';
 	import Toast from '../components/toast.svelte';
+	import Button from '../components/button.svelte';
 	import type {Board as BoardType, BoardSize, SolutionResponse, ErrorResponse, CheckSolutionResponse } from '../types';
 	import { encodeBoardState, decodeBoardState, generateEmptyBoard } from '../lib/utils';
 	const API_URL = 'http://localhost:5000';
@@ -133,29 +134,30 @@
 			{/each}
 		</div>
 		<div class="flex flex-row md:flex-col gap-4">
-			<button
-				class="px-6 py-2 bg-blue-500 hover:opacity-80 hover:scale-[98%] shadow-md rounded-lg text-lg font-bold"
-				on:click={() => {
+			<Button 
+				clickHandler={() => {
 					error_msg = null;
 					findSolutionHandler();
-				}}>solve</button
-			>
-			<button
-				class="px-6 py-2 bg-green-500 hover:opacity-80 hover:scale-[98%] shadow-md rounded-lg text-lg font-bold"
-				on:click={() => {
+				}}
+				content="solve"
+				color="bg-blue-500"
+			/>
+			<Button 
+				clickHandler={() => {
 					error_msg = null;
 					checkSolutionHandler();
 				}}
-			>
-				check
-			</button>
-			<button
-				class="px-6 py-2 bg-red-500 hover:opacity-80 hover:scale-[98%] shadow-md rounded-lg text-lg font-bold"
-				on:click={() => {
+				content="check"
+				color="bg-green-500"
+			/>
+			<Button 
+				clickHandler={() => {
 					error_msg = null;
 					board_state = generateEmptyBoard(selected_size);
-				}}>clear</button
-			>
+				}}
+				content="clear"
+				color="bg-red-500"
+			/>
 		</div>
 		<div class="mt-4 flex flex-col gap-2">
 			<h3 class="font-semibold text-lg">share this puzzle:</h3>
