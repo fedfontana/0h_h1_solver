@@ -6,9 +6,12 @@
 
 style stuff
 - better layout
+  - https://developer.mozilla.org/en-US/docs/Web/CSS/CSS_Flexible_Box_Layout/Ordering_Flex_Items#the_order_property
 - dark mode
-- after clicking "check solution": error toast (probably different component, no close button, closes with timeout) that shakes sideways if wrong, green toast otherwise
-- add icons to buttons
+- after clicking "check solution": 
+  - error toast (probably different component, no close button, closes with timeout) that shakes sideways if wrong
+  -  green toast otherwise
+- maybe add icons to buttons?
 
 - maybe on `board/<repr>` show only the board, the solve button and the check button and make it so that the clear button returns to the original url of the page (original puzzle)
 
