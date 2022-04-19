@@ -1,0 +1,60 @@
+{
+	"extends": "./.svelte-kit/tsconfig.json",
+	"compilerOptions": {
+		"experimentalDecorators": true,
+		"baseUrl": ".",
+		"outDir": "build/dist",
+		"module": "es2020",
+		"target": "es2020",
+		"lib": [
+			"es2020",
+			"DOM"
+		],
+		"sourceMap": true,
+		"allowJs": true,
+		"moduleResolution": "node",
+		"rootDir": "src",
+		"forceConsistentCasingInFileNames": true,
+		"noImplicitReturns": true,
+		"noImplicitThis": true,
+		"noImplicitAny": true,
+		"strictNullChecks": true,
+		"suppressImplicitAnyIndexErrors": true,
+		"noUnusedLocals": true,
+		"skipLibCheck": true,
+		"allowSyntheticDefaultImports": true,
+		"removeComments": true,
+		"importsNotUsedAsValues": "error",
+		"isolatedModules": true,
+		"resolveJsonModule": true,
+		"esModuleInterop": true,
+		"checkJs": true,
+		"strict": true,
+		"paths": {
+			"$src": [
+				"src"
+			],
+			"$src/*": [
+				"src/*"
+			],
+			"$components": [
+				"src/components"
+			],
+			"$components/*": [
+				"src/components/*"
+			],
+			"$types": [
+				"src/types"
+			],
+			"$types/*": [
+				"src/types/*"
+			]
+		}
+	},
+	"include": [
+		"src/**/*.d.ts",
+		"src/**/*.js",
+		"src/**/*.ts",
+		"src/**/*.svelte"
+	],
+}
