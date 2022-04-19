@@ -1,28 +1,29 @@
-<script>
+<script lang="ts">
 	import CopyInput from '../components/copy_input.svelte';
 	import Board from '../components/board.svelte';
 	import Toast from '../components/toast.svelte';
+	import type {Board as BoardType, BoardSize, SolutionResponse, ErrorResponse, CheckSolutionResponse } from '../types';
 	import { encodeBoardState, decodeBoardState, generateEmptyBoard } from '../lib/utils';
 	const API_URL = 'http://localhost:5000';
 	const WEBSITE_URL = 'http://localhost:3000';
 
-	const SIZES = [4, 6, 8, 10, 12];
-	let selected_size = 4;
+	const SIZES: BoardSize[] = [4, 6, 8, 10, 12];
+	let selected_size: BoardSize = 4;
 
-	let error_msg = null;
-	let info_msg = null;
+	let error_msg: string|null = null;
+	let info_msg: string|null = null;
 
-	let is_solution = null;
+	let is_solution: boolean|null = null;
 
 	let board_state = generateEmptyBoard(selected_size);
 
 	async function findSolutionHandler() {
 		let response = await fetch(`${API_URL}/get_solution/${encodeBoardState(board_state)}`);
 		let status = response.status;
-		let JSONRes = await response.json();
+		let JSONRes: SolutionResponse | ErrorResponse = await response.json();
 		if (status == 404) {
 			// no solution found
-			error_msg = JSONRes.error_message;
+			error_msg = (JSONRes as ErrorResponse).error_message;
 			return;
 		}
 		if (!response.ok) {
@@ -30,10 +31,10 @@
 			error_msg = 'Something went wrong. Please try again.';
 			return;
 		}
-		board_state = decodeBoardState(JSONRes.solution);
+		board_state = decodeBoardState((JSONRes as SolutionResponse).solution);
 	}
 
-	function isBoardFull(board_state) {
+	function isBoardFull(board_state: BoardType): boolean {
 		for(let row of board_state) {
 			for(let tile of row) {
 				if(tile == 'x') return false;
@@ -47,14 +48,14 @@
 			info_msg = "Please fill the board before checking the solution.";
 			return
 		}
-		let response = await fetch(`${API_URL}/check_solution/${encodeBoardState(board_state)}`);
-		let JSONRes = await response.json();
+		let response= await fetch(`${API_URL}/check_solution/${encodeBoardState(board_state)}`);
+		let JSONRes: CheckSolutionResponse|ErrorResponse  = await response.json();
 		if (!response.ok) {
 			// catch all of the unhandled errors
 			error_msg = 'Something went wrong. Please try again.';
 			return;
 		}
-		is_solution = JSONRes.is_solution;
+		is_solution = (JSONRes as CheckSolutionResponse).is_solution;
 	}
 </script>
 

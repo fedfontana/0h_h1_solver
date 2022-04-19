@@ -1,8 +1,8 @@
-<script>
+<script lang="ts">
 	import {generateEmptyBoard} from '../lib/utils';
 	export let board_state = generateEmptyBoard(4);
 
-    function clickHandler(row_idx, col_idx, isRightClick) {
+    function clickHandler(row_idx: number, col_idx: number, isRightClick: boolean): void {
         if(board_state[row_idx][col_idx] == "y") {
             board_state[row_idx][col_idx] = isRightClick ? "x" : "b";
         } else if(board_state[row_idx][col_idx] == "b") {

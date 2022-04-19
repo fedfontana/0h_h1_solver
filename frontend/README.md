@@ -30,7 +30,6 @@ functionality stuff
 code stuff
 - add vite `$lib/$src/$components` stuff
 - !!! move stuff to __layout and stores.js
-- add typescript
 - extract components
 
 utility stuff

@@ -1,13 +1,14 @@
-<script>
+<script lang="ts">
 	import { fade } from 'svelte/transition';
+	import type { ToastType } from '../types';
 
-	export let type = 'error'; // error | info | success
-	export let clickHandler;
-	export let content = '';
-	export let buttonText = '';
+	export let type: ToastType  = 'error';
+	export let clickHandler: () => void;
+	export let content: string = '';
+	export let buttonText: string= '';
 
-	let color = 'bg-red-500';
-	let buttonColor = 'bg-red-200';
+	let color: string = 'bg-red-500';
+	let buttonColor: string = 'bg-red-200';
 	if (type == 'info') {
 		color = 'bg-blue-500';
 		buttonColor = 'bg-blue-200';

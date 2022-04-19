@@ -1,8 +1,8 @@
-<script>
+<script lang="ts">
     import {fade} from 'svelte/transition';
-	export let content = '';
+	export let content: string = '';
 
-	async function copyContent() {
+	async function copyContent(): Promise<void> {
 		try {
 			await navigator.clipboard.writeText(content);
             showCopiedTooltip = true;
@@ -13,7 +13,7 @@
         
 	}
 
-    let showCopiedTooltip = false;
+    let showCopiedTooltip: boolean = false;
 </script>
 
 <div class="max-w-md flex">
