@@ -15,6 +15,8 @@ style stuff
   - ideally the whole board should fit in the middle section
 - add icons to buttons
 
+- maybe on `board/<repr>` show only the board, the solve button and the check button and make it so that the clear button returns to the original url of the page (original puzzle)
+
 functionality stuff
 - check that the board is completely full before checking the solution
 - maybe add possibilty to highlight initial state (easier way to copy solution)
@@ -28,7 +30,6 @@ functionality stuff
   - keyboard shortcuts info
 
 code stuff
-- !!! move stuff to __layout and stores.js
 
 utility stuff
 - cltr+l clears the board
