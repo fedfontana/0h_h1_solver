@@ -4,9 +4,10 @@
 
 ## TODO
 
+- error page?
+  - [this puzzle](http://localhost:3000/board/yyyxbbxxyyxx-yxxxbxbxyxyx-yyxxbbxxyyxx-yxxxbxbxyxyx-yyyxbxbxyxyx-xxxxxxxxxxxx-xxxxxxxxxxxx-xxbbbxyyxxxx-xxbxbxyxyxxx-xxbxbxyyxxxx-xxbxbxyxyxxx-xxbbbxyxyxxx)
+
 style stuff
-- better layout
-  - https://developer.mozilla.org/en-US/docs/Web/CSS/CSS_Flexible_Box_Layout/Ordering_Flex_Items#the_order_property
 - dark mode
 - after clicking "check solution": 
   - error toast (probably different component, no close button, closes with timeout) that shakes sideways if wrong
@@ -17,9 +18,6 @@ style stuff
 
 functionality stuff
 - maybe add possibilty to highlight initial state (easier way to copy solution)
-- change things so that right click in the middle of the tiles doesnt bring up context menu
-  - either preventDefault on contextmenu on all of the main Board div 
-  - or use padding instead of gap? (with second option, even a slightly missed click would result in a successfull tile coloring)
 - add settings and about tab with:
   - theme
   - about and credits
@@ -37,6 +35,3 @@ utility stuff
 - shif+tab tabs through the board
 - enter changes the selected tile color like a left click
 - shift+enter changes the selected tile color like a left click
-
-checks
-- check what happens when multiple error/info/success toasts are rendered
