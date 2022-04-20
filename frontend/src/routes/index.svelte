@@ -1,10 +1,7 @@
 <script lang="ts">
-	import Board from '$components/board.svelte';
-	import Checkbox from '$components/checkbox.svelte';
+	import { page } from '$app/stores';
 	import { onDestroy } from 'svelte';
-	import PuzzlePageLayout from '$components/layout.svelte';
-	import CopyInput from '$components/copy_input.svelte';
-	import Button from '$components/button.svelte';
+	
 	import type {
 		Board as BoardType,
 		BoardSize,
@@ -12,8 +9,8 @@
 		ErrorResponse,
 		CheckSolutionResponse
 	} from '$src/types';
+
 	import { API_URL, SIZES } from '$src/constants';
-	import { encodeBoardState, decodeBoardState, generateEmptyBoard, copyBoard } from '$src/lib/utils';
 	import {
 		board_state,
 		error_message,
@@ -21,7 +18,13 @@
 		success_message,
 		board_is_solution
 	} from '$src/stores';
-	import { page } from '$app/stores';
+	import { encodeBoardState, decodeBoardState, generateEmptyBoard, copyBoard } from '$src/lib/utils';
+
+	import PuzzlePageLayout from '$components/layout.svelte';
+	import Board from '$components/board.svelte';
+	import Checkbox from '$components/checkbox.svelte';
+	import CopyInput from '$components/copy_input.svelte';
+	import Button from '$components/button.svelte';
 
 	let base_website_url = $page.url.host;
 	let selected_size: BoardSize = 4;
@@ -126,7 +129,7 @@
 	<div slot="right">
 		<div class="flex flex-row md:flex-col gap-4">
 			<Button
-				clickHandler={() => {
+				click_handler={() => {
 					$error_message = null;
 					checkSolutionHandler();
 				}}
@@ -134,7 +137,7 @@
 				color="bg-green-500"
 			/>
 			<Button
-				clickHandler={() => {
+				click_handler={() => {
 					$error_message = null;
 					$info_message = null;
 					findSolutionHandler();
@@ -143,7 +146,7 @@
 				color="bg-blue-500"
 			/>
 			<Button
-				clickHandler={() => {
+				click_handler={() => {
 					$error_message = null;
 					$info_message = null;
 					$success_message = null;

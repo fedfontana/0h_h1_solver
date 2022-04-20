@@ -1,19 +1,15 @@
 <script lang="ts">
     import { page } from '$app/stores';
-    import Board from '$components/board.svelte';
 	import { onDestroy } from 'svelte';
-	import PuzzlePageLayout from '$components/layout.svelte';
-	import CopyInput from '$components/copy_input.svelte';
-	import Button from '$components/button.svelte';
-    import { API_URL} from '$src/constants';
-	import Checkbox from '$components/checkbox.svelte';
+
 	import type {
 		Board as BoardType,
 		SolutionResponse,
 		ErrorResponse,
 		CheckSolutionResponse
 	} from '$src/types';
-	import { encodeBoardState, decodeBoardState, generateEmptyBoard, copyBoard} from '$src/lib/utils';
+
+    import { API_URL} from '$src/constants';
 	import {
 		board_state,
 		error_message,
@@ -21,13 +17,21 @@
 		success_message,
 		board_is_solution
 	} from '$src/stores';
+	import { encodeBoardState, decodeBoardState, generateEmptyBoard, copyBoard} from '$src/lib/utils';
 
-    let encoded_board = $page.params.encoded_board;
-	let base_website_url = $page.url.host;
-	let highlight_initial_board: boolean = false;
+	import PuzzlePageLayout from '$components/layout.svelte';
+    import Board from '$components/board.svelte';
+	import CopyInput from '$components/copy_input.svelte';
+	import Button from '$components/button.svelte';
+	import Checkbox from '$components/checkbox.svelte';
 
+	let encoded_board = $page.params.encoded_board;
 	const initial_board_state = decodeBoardState(encoded_board);
 	$board_state = copyBoard(initial_board_state); 
+
+	const base_website_url = $page.url.host;
+	let highlight_initial_board: boolean = false;
+
 
 	async function findSolutionHandler() {
 		let response = await fetch(`${API_URL}/get_solution/${encodeBoardState($board_state)}`);
@@ -100,7 +104,7 @@
 	<div slot="right">
 		<div class="flex flex-row md:flex-col gap-4">
 			<Button
-				clickHandler={() => {
+				click_handler={() => {
 					$error_message = null;
 					checkSolutionHandler();
 				}}
@@ -108,7 +112,7 @@
 				color="bg-green-500"
 			/>
 			<Button
-				clickHandler={() => {
+				click_handler={() => {
 					$error_message = null;
 					$info_message = null;
 					findSolutionHandler();
@@ -117,7 +121,7 @@
 				color="bg-blue-500"
 			/>
 			<Button
-				clickHandler={() => {
+				click_handler={() => {
 					$error_message = null;
 					$info_message = null;
 					$success_message = null;

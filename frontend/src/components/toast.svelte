@@ -3,9 +3,9 @@
 	import type { ToastType } from '$src/types';
 
 	export let type: ToastType  = 'error';
-	export let clickHandler: () => void;
+	export let click_handler: () => void;
 	export let content: string = '';
-	export let buttonText: string= '';
+	export let button_content: string= '';
 
 	let color: string = 'red';
 	if (type == 'info') {
@@ -22,6 +22,6 @@
 	{content}
 	<button
 		class={`px-6 py-2 bg-${color}-200 hover:opacity-80 hover:scale-[98%] rounded-lg text-lg font-bold`}
-		on:click={clickHandler}>{buttonText}</button
+		on:click={click_handler}>{button_content}</button
 	>
 </div>

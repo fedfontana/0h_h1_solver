@@ -6,10 +6,11 @@
 	export let board_state = generateEmptyBoard(4);
 	export let highlight_original: boolean = false;
 	export let initial_state: Board | null = null;
-	export let can_edit_board: boolean = true;
+	export let readonly: boolean = true;
 	export let can_edit_initial_state: boolean = true;
 
 	if (
+		(can_edit_initial_state && !readonly) ||
 		(!can_edit_initial_state && initial_state === null) ||
 		(highlight_original && initial_state === null)
 	) {
@@ -24,8 +25,8 @@
 		throw Error('initial_board and board_state sizes must match');
 	}
 
-	function clickHandler(row_idx: number, col_idx: number, isRightClick: boolean): void {
-		if (!can_edit_board) {
+	function click_handler(row_idx: number, col_idx: number, is_right_click: boolean): void {
+		if (!readonly) {
 			$error_message = 'The board is read only.';
 			return;
 		}
@@ -36,11 +37,11 @@
 		}
 
 		if (board_state[row_idx][col_idx] == 'y') {
-			board_state[row_idx][col_idx] = isRightClick ? 'x' : 'b';
+			board_state[row_idx][col_idx] = is_right_click ? 'x' : 'b';
 		} else if (board_state[row_idx][col_idx] == 'b') {
-			board_state[row_idx][col_idx] = isRightClick ? 'y' : 'x';
+			board_state[row_idx][col_idx] = is_right_click ? 'y' : 'x';
 		} else if (board_state[row_idx][col_idx] == 'x') {
-			board_state[row_idx][col_idx] = isRightClick ? 'b' : 'y';
+			board_state[row_idx][col_idx] = is_right_click ? 'b' : 'y';
 		}
 	}
 
@@ -73,7 +74,7 @@
 						board_classes_per_size[board_state.length]
 					} shadow-lg transition-colors duration-200
 					${
-						can_edit_board &&
+						readonly &&
 						!can_edit_initial_state &&
 						initial_state !== null &&
 						initial_state[row_idx][col_idx] === 'x'
@@ -81,8 +82,8 @@
 							: ''
 					}
 					flex items-center justify-center`}
-					on:click={() => clickHandler(row_idx, col_idx, false)}
-					on:contextmenu|preventDefault={() => clickHandler(row_idx, col_idx, true)}
+					on:click={() => click_handler(row_idx, col_idx, false)}
+					on:contextmenu|preventDefault={() => click_handler(row_idx, col_idx, true)}
 				>
 					{#if highlight_original && initial_state !== null && initial_state[row_idx][col_idx] !== 'x'}
 						<svg

@@ -1,7 +1,9 @@
 <script lang="ts">
 	import '$src/app.css';
-	import Toast from '$components/toast.svelte';
+
 	import { error_message, info_message, success_message, board_is_solution } from '$src/stores';
+	
+	import Toast from '$components/toast.svelte';
 
 	$error_message = null;
 	$info_message = null;
@@ -19,12 +21,12 @@
 		{#if $error_message != null}
 			<div class="md:fixed md:right-10 md:top-10">
 				<Toast
-					clickHandler={() => {
+					click_handler={() => {
 						$error_message = null;
 						$info_message = null;
 					}}
 					content={$error_message}
-					buttonText="close"
+					button_content="close"
 				/>
 			</div>
 		{/if}
@@ -32,12 +34,12 @@
 			<div class="md:fixed md:right-10 md:top-10">
 				<Toast
 					type="info"
-					clickHandler={() => {
+					click_handler={() => {
 						$error_message = null;
 						$info_message = null;
 					}}
 					content={$info_message}
-					buttonText="close"
+					button_content="close"
 				/>
 			</div>
 		{/if}
@@ -45,25 +47,25 @@
 			<div class="md:fixed md:right-10 md:top-10">
 				<Toast
 					type="success"
-					clickHandler={() => {
+					click_handler={() => {
 						$board_is_solution = null;
 						$info_message = null;
 						$error_message = null;
 					}}
 					content="Your solution is correct!"
-					buttonText="close"
+					button_content="close"
 				/>
 			</div>
 		{:else if $board_is_solution == false}
 			<div class="md:fixed md:right-10 md:top-10">
 				<Toast
-					clickHandler={() => {
+					click_handler={() => {
 						$board_is_solution = null;
 						$info_message = null;
 						$error_message = null;
 					}}
 					content="Your solution is wrong."
-					buttonText="close"
+					button_content="close"
 				/>
 			</div>
 		{/if}

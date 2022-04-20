@@ -19,9 +19,10 @@ functionality stuff
   - keyboard shortcuts info
 
 code stuff
-- instead of using an api, just use a webworker js script
-- consistent variable/prop naming scheme
-- reorder imports
+- usare eventi che vengono catchati in __layout:
+  - on:error -- in questo modo da __error si possono anche catchare i vari "Can't update a readonly board" e fare si che non venga mostrato il toast
+  - on:info
+  - on:success
 
 utility stuff
 - cltr+l clears the board
