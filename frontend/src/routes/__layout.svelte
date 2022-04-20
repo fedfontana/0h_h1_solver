@@ -68,64 +68,67 @@
 	}
 </script>
 
-<div
-	class="relative w-full h-full flex flex-col items-center justify-center gap-32 md:flex-row md:w-9/12 mx-auto"
->
-	{#if $error_message != null}
-		<div class="fixed right-10 top-10">
-			<Toast
-				clickHandler={() => {
-					$error_message = null;
-					$info_message = null;
-				}}
-				content={$error_message}
-				buttonText="close"
-			/>
-		</div>
-	{/if}
-	{#if $info_message != null}
-		<div class="fixed right-10 top-10">
-			<Toast
-				type="info"
-				clickHandler={() => {
-					$error_message = null;
-					$info_message = null;
-				}}
-				content={$info_message}
-				buttonText="close"
-			/>
-		</div>
-	{/if}
-	{#if is_solution == true}
-		<div class="fixed right-10 top-10">
-			<Toast
-				type="success"
-				clickHandler={() => {
-					is_solution = null;
-					$info_message = null;
-					$error_message = null;
-				}}
-				content="Your solution is correct!"
-				buttonText="close"
-			/>
-		</div>
-	{:else if is_solution == false}
-		<div class="fixed right-10 top-10">
-			<Toast
-				clickHandler={() => {
-					is_solution = null;
-					$info_message = null;
-					$error_message = null;
-				}}
-				content="Your solution is wrong."
-				buttonText="close"
-			/>
-		</div>
-	{/if}
+<div class="relative w-full h-full flex flex-col pt-10 md:w-8/12 mx-auto">
+	<nav class="">
+		<h1 class="text-8xl font-bold text-center w-full h-[8%]"><a href="/">0h h1 solver</a></h1>
+	</nav>
+	<div
+		class="relative h-[92%] w-full flex flex-col items-center justify-center gap-12 md:flex-row"
+	>
+		{#if $error_message != null}
+			<div class="fixed right-10 top-10">
+				<Toast
+					clickHandler={() => {
+						$error_message = null;
+						$info_message = null;
+					}}
+					content={$error_message}
+					buttonText="close"
+				/>
+			</div>
+		{/if}
+		{#if $info_message != null}
+			<div class="fixed right-10 top-10">
+				<Toast
+					type="info"
+					clickHandler={() => {
+						$error_message = null;
+						$info_message = null;
+					}}
+					content={$info_message}
+					buttonText="close"
+				/>
+			</div>
+		{/if}
+		{#if is_solution == true}
+			<div class="fixed right-10 top-10">
+				<Toast
+					type="success"
+					clickHandler={() => {
+						is_solution = null;
+						$info_message = null;
+						$error_message = null;
+					}}
+					content="Your solution is correct!"
+					buttonText="close"
+				/>
+			</div>
+		{:else if is_solution == false}
+			<div class="fixed right-10 top-10">
+				<Toast
+					clickHandler={() => {
+						is_solution = null;
+						$info_message = null;
+						$error_message = null;
+					}}
+					content="Your solution is wrong."
+					buttonText="close"
+				/>
+			</div>
+		{/if}
 
-	<!-- LEFT SIDE -->
-	<div class="flex-[3]">
-		<div class="flex flex-row md:flex-col w-8/12 ml-auto mr-5">
+		<!-- LEFT SIDE -->
+		<div class="flex flex-row md:flex-col flex-[2]">
 			{#each SIZES as size}
 				<button
 					class={`m-3 hover:opacity-50 hover:bg-neutral-300 ${
@@ -144,19 +147,16 @@
 				</button>
 			{/each}
 		</div>
-	</div>
-	<!--/LEFT SIDE  -->
+		<!--/LEFT SIDE  -->
 
-	<!-- CENTER -->
-	<div class="flex flex-col gap-20 w-[40%] items-center flex-[4]">
-		<h1 class="text-8xl font-bold text-center w-full"><a href="/">0h h1 solver</a></h1>
-		<slot />
-	</div>
-	<!--/CENTER -->
+		<!-- CENTER -->
+		<div class="flex flex-col gap-20 items-center flex-[6]">
+			<slot />
+		</div>
+		<!--/CENTER -->
 
-	<!-- RIGHT SIDE -->
-	<div class="flex-[3]">
-		<div class="mr-auto ml-5 w-8/12">
+		<!-- RIGHT SIDE -->
+		<div class="flex-[2]">
 			<div class="flex flex-row md:flex-col gap-4">
 				<Button
 					clickHandler={() => {
@@ -188,6 +188,6 @@
 				<CopyInput content={`${WEBSITE_URL}/board/${encodeBoardState($board_state)}`} />
 			</div>
 		</div>
+		<!--/RIGHT SIDE -->
 	</div>
-	<!--/RIGHT SIDE -->
 </div>
