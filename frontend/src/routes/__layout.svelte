@@ -1,17 +1,39 @@
 <script lang="ts">
 	import '$src/app.css';
 
+	import type { MessageEvent } from '$src/types';
+
 	import { error_message, info_message, success_message, board_is_solution } from '$src/stores';
 	
 	import Toast from '$components/toast.svelte';
 
-	$error_message = null;
-	$info_message = null;
-	$success_message = null;
 	$board_is_solution = null;
+
+	function on_error(event: MessageEvent): void {
+		console.log('Caught an error');
+		$info_message = null;
+		$success_message = null;
+		$error_message = event.message;
+	}
+
+	function on_info(event: MessageEvent): void {
+		$error_message = null ;
+		$success_message = null;
+		$info_message = event.message;
+	}
+
+	function on_success(event: MessageEvent): void {
+		$error_message = null;
+		$info_message = null;
+		$success_message = event.message;
+	}
+
 </script>
 
-<div class="relative w-full h-full flex flex-col py-12 md:w-8/12 mx-auto">
+<div class="relative w-full h-full flex flex-col py-12 md:w-8/12 mx-auto"
+on:error_={on_error}
+on:info={on_info}
+on:success={on_success}>
 	<nav class="mb-5 md:mb-0">
 		<h1 class="text-5xl md:text-8xl font-bold text-center w-full h-[8%]">
 			<a href="/">0h h1 solver</a>
@@ -70,5 +92,5 @@
 			</div>
 		{/if}
 	</div>
-	<slot />
+	<slot/>
 </div>

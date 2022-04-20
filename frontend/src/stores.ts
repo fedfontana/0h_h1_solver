@@ -1,5 +1,5 @@
 import { writable, type Writable} from "svelte/store";
-import { generateEmptyBoard } from "$src/lib/utils";
+import { generateEmptyBoard } from "$lib/utils";
 import type { Board } from "$src/types";
 
 export const error_message: Writable<string|null> = writable<string|null>(null);

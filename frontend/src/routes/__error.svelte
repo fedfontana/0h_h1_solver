@@ -1,5 +1,5 @@
 <script>
-    import { decodeBoardState } from "$src/lib/utils";
+    import { decodeBoardState } from "$lib/utils";
 
     import Board from "$src/components/board.svelte";
     
@@ -7,8 +7,9 @@
 </script>
 
 <div class="flex flex-col items-center justify-center gap-16 h-[92%]">
-    <div class="w-[75vw] h-[75vw] md:w-[25vw] md:h-[25vw]">
-        <Board board_state={error_board} readonly={false} />
+    <div 
+    on:error_|stopPropagation class="w-[75vw] h-[75vw] md:w-[25vw] md:h-[25vw]">
+        <Board board_state={error_board} readonly={true} />
     </div>
     <div class="flex flex-col items-center gap-8">
         <h2 class="text-4xl font-semibold">This is now the page you are looking for</h2>

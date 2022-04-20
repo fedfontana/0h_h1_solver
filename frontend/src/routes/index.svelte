@@ -1,7 +1,9 @@
 <script lang="ts">
+	import { createEventDispatcher } from 'svelte';
+
 	import { page } from '$app/stores';
 	import { onDestroy } from 'svelte';
-	
+
 	import type {
 		Board as BoardType,
 		BoardSize,
@@ -13,12 +15,14 @@
 	import { API_URL, SIZES } from '$src/constants';
 	import {
 		board_state,
-		error_message,
-		info_message,
-		success_message,
 		board_is_solution
 	} from '$src/stores';
-	import { encodeBoardState, decodeBoardState, generateEmptyBoard, copyBoard } from '$src/lib/utils';
+	import {
+		encodeBoardState,
+		decodeBoardState,
+		generateEmptyBoard,
+		copyBoard
+	} from '$lib/utils';
 
 	import PuzzlePageLayout from '$components/layout.svelte';
 	import Board from '$components/board.svelte';
@@ -29,12 +33,11 @@
 	let base_website_url = $page.url.host;
 	let selected_size: BoardSize = 4;
 
-	$error_message = null;
-	$info_message = null;
-	$success_message = null;
+	const dispatch = createEventDispatcher();
+
 	$board_state = generateEmptyBoard(selected_size);
 
-	let pre_solution_board: BoardType |null = null;
+	let pre_solution_board: BoardType | null = null;
 	let highlight_initial_board: boolean = false;
 
 	async function findSolutionHandler() {
@@ -43,18 +46,18 @@
 		let JSONRes: SolutionResponse | ErrorResponse = await response.json();
 		if (status == 404) {
 			// no solution found
-			$info_message = null;
-			$success_message = null;
 			$board_is_solution = null;
-			$error_message = (JSONRes as ErrorResponse).error_message;
+			dispatch('error_', {
+				message: (JSONRes as ErrorResponse).error_message
+			});
 			return;
 		}
 		if (!response.ok) {
 			// catch all of the unhandled errors
-			$info_message = null;
-			$success_message = null;
 			$board_is_solution = null;
-			$error_message = 'Something went wrong. Please try again.';
+			dispatch('error_', {
+				messsage: 'Something went wrong. Please try again.'
+			});
 			return;
 		}
 		pre_solution_board = copyBoard($board_state);
@@ -72,20 +75,20 @@
 
 	async function checkSolutionHandler() {
 		if (!isBoardFull($board_state)) {
-			$error_message = null;
-			$success_message = null;
 			$board_is_solution = null;
-			$info_message = 'Please fill the board before checking the solution.';
+			dispatch('info', {
+				message: 'Please fill the board before checking the solution.'
+			});
 			return;
 		}
 		let response = await fetch(`${API_URL}/check_solution/${encodeBoardState($board_state)}`);
 		let JSONRes: CheckSolutionResponse | ErrorResponse = await response.json();
 		if (!response.ok) {
 			// catch all of the unhandled errors
-			$info_message = null;
-			$success_message = null;
 			$board_is_solution = null;
-			$error_message = 'Something went wrong. Please try again.';
+			dispatch('error_', {
+				message: 'Something went wrong. Please try again.'
+			});
 			return;
 		}
 		$board_is_solution = (JSONRes as CheckSolutionResponse).is_solution;
@@ -111,8 +114,6 @@
 					pre_solution_board = null;
 					selected_size = size;
 					$board_state = generateEmptyBoard(size);
-					$error_message = null;
-					$info_message = null;
 				}}
 			>
 				<p class="text-3xl md:text-4xl font-semibold">
@@ -123,33 +124,28 @@
 	</div>
 
 	<div slot="center" class="h-[93vw] w-[93vw]  md:h-[30vw] md:w-[30vw]">
-		<Board bind:board_state={$board_state} initial_state={pre_solution_board} highlight_original={highlight_initial_board && pre_solution_board !== null} />
+		<Board
+			on:error_ on:info on:success
+			bind:board_state={$board_state}
+			initial_state={pre_solution_board}
+			highlight_original={highlight_initial_board && pre_solution_board !== null}
+		/>
 	</div>
 
 	<div slot="right">
 		<div class="flex flex-row md:flex-col gap-4">
 			<Button
-				click_handler={() => {
-					$error_message = null;
-					checkSolutionHandler();
-				}}
+				click_handler={checkSolutionHandler}
 				content="check"
 				color="bg-green-500"
 			/>
 			<Button
-				click_handler={() => {
-					$error_message = null;
-					$info_message = null;
-					findSolutionHandler();
-				}}
+				click_handler={findSolutionHandler}
 				content="solve"
 				color="bg-blue-500"
 			/>
 			<Button
 				click_handler={() => {
-					$error_message = null;
-					$info_message = null;
-					$success_message = null;
 					pre_solution_board = null;
 					highlight_initial_board = false;
 					$board_state = generateEmptyBoard(selected_size);
@@ -159,8 +155,10 @@
 			/>
 		</div>
 		<div class="mt-10 flex items-center gap-3">
-			<Checkbox bind:checked={highlight_initial_board} disabled={pre_solution_board === null}/> 
-			<p class={`text-lg font-semibold ${pre_solution_board === null ? 'opacity-60' : ''}`}>highlight initial board state</p>
+			<Checkbox bind:checked={highlight_initial_board} disabled={pre_solution_board === null} />
+			<p class={`text-lg font-semibold ${pre_solution_board === null ? 'opacity-60' : ''}`}>
+				highlight initial board state
+			</p>
 		</div>
 		<div class="mt-16 flex flex-col gap-2">
 			<h3 class="font-semibold text-xl">share this puzzle:</h3>

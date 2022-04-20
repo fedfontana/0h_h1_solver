@@ -6,3 +6,7 @@ export type BoardSize = 4 | 6 | 8 | 10 | 12;
 export type SolutionResponse = { solution: string };
 export type ErrorResponse = { error_message: string };
 export type CheckSolutionResponse = { is_solution: boolean };
+
+export type MessageEvent = {
+    message: string
+}

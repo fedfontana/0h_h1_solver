@@ -1,4 +1,6 @@
 <script lang="ts">
+	import { createEventDispatcher } from 'svelte';
+
     import { page } from '$app/stores';
 	import { onDestroy } from 'svelte';
 
@@ -12,9 +14,6 @@
     import { API_URL} from '$src/constants';
 	import {
 		board_state,
-		error_message,
-		info_message,
-		success_message,
 		board_is_solution
 	} from '$src/stores';
 	import { encodeBoardState, decodeBoardState, generateEmptyBoard, copyBoard} from '$src/lib/utils';
@@ -29,6 +28,8 @@
 	const initial_board_state = decodeBoardState(encoded_board);
 	$board_state = copyBoard(initial_board_state); 
 
+	const dispatch = createEventDispatcher();
+
 	const base_website_url = $page.url.host;
 	let highlight_initial_board: boolean = false;
 
@@ -39,18 +40,18 @@
 		let JSONRes: SolutionResponse | ErrorResponse = await response.json();
 		if (status == 404) {
 			// no solution found
-			$info_message = null;
-			$success_message = null;
 			$board_is_solution = null;
-			$error_message = (JSONRes as ErrorResponse).error_message;
+			dispatch('error_', {
+				message: (JSONRes as ErrorResponse).error_message,
+			})
 			return;
 		}
 		if (!response.ok) {
 			// catch all of the unhandled errors
-			$info_message = null;
-			$success_message = null;
 			$board_is_solution = null;
-			$error_message = 'Something went wrong. Please try again.';
+			dispatch('error_', {
+				message: 'Something went wrong. Please try again.',
+			})
 			return;
 		}
 		$board_state = decodeBoardState((JSONRes as SolutionResponse).solution);
@@ -67,20 +68,19 @@
 
 	async function checkSolutionHandler() {
 		if (!isBoardFull($board_state)) {
-			$error_message = null;
-			$success_message = null;
-			$board_is_solution = null;
-			$info_message = 'Please fill the board before checking the solution.';
+			dispatch('info', {
+				message: 'Please fill the board before checking the solution.',
+			})
 			return;
 		}
 		let response = await fetch(`${API_URL}/check_solution/${encodeBoardState($board_state)}`);
 		let JSONRes: CheckSolutionResponse | ErrorResponse = await response.json();
 		if (!response.ok) {
 			// catch all of the unhandled errors
-			$info_message = null;
-			$success_message = null;
 			$board_is_solution = null;
-			$error_message = 'Something went wrong. Please try again.';
+			dispatch('error_', {
+				message: 'Something went wrong. Please try again.',
+			})
 			return;
 		}
 		$board_is_solution = (JSONRes as CheckSolutionResponse).is_solution;
@@ -104,27 +104,17 @@
 	<div slot="right">
 		<div class="flex flex-row md:flex-col gap-4">
 			<Button
-				click_handler={() => {
-					$error_message = null;
-					checkSolutionHandler();
-				}}
+				click_handler={checkSolutionHandler}
 				content="check"
 				color="bg-green-500"
 			/>
 			<Button
-				click_handler={() => {
-					$error_message = null;
-					$info_message = null;
-					findSolutionHandler();
-				}}
+				click_handler={findSolutionHandler}
 				content="solve"
 				color="bg-blue-500"
 			/>
 			<Button
 				click_handler={() => {
-					$error_message = null;
-					$info_message = null;
-					$success_message = null;
 					$board_state = copyBoard(initial_board_state);
 				}}
 				content="clear"

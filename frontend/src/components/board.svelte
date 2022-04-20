@@ -1,6 +1,8 @@
 <script lang="ts">
-	import { generateEmptyBoard } from '$src/lib/utils';
-	import { error_message } from '$src/stores';
+	import { createEventDispatcher } from 'svelte';
+
+	import { generateEmptyBoard } from '$lib/utils';
+
 	import type { Board } from '$src/types';
 	
 	export let board_state = generateEmptyBoard(4);
@@ -9,9 +11,12 @@
 	export let readonly: boolean = true;
 	export let can_edit_initial_state: boolean = true;
 
+	const dispatch = createEventDispatcher();
+
+	if(readonly) can_edit_initial_state = false;
+
 	if (
-		(can_edit_initial_state && !readonly) ||
-		(!can_edit_initial_state && initial_state === null) ||
+		(!readonly && !can_edit_initial_state && initial_state === null) ||
 		(highlight_original && initial_state === null)
 	) {
 		throw Error('Unacceptable comnbination of props');
@@ -26,13 +31,17 @@
 	}
 
 	function click_handler(row_idx: number, col_idx: number, is_right_click: boolean): void {
-		if (!readonly) {
-			$error_message = 'The board is read only.';
+		if (readonly) {
+			dispatch('error_', {
+				message: 'The board is read only.',
+			})
 			return;
 		}
 
 		if (!can_edit_initial_state && initial_state![row_idx][col_idx] !== 'x') {
-			$error_message = 'Cannot edit the initial state of the board';
+			dispatch('error_', {
+				message: 'Cannot edit the initial state of the board'
+			})
 			return;
 		}
 
@@ -74,7 +83,7 @@
 						board_classes_per_size[board_state.length]
 					} shadow-lg transition-colors duration-200
 					${
-						readonly &&
+						!readonly &&
 						!can_edit_initial_state &&
 						initial_state !== null &&
 						initial_state[row_idx][col_idx] === 'x'
