@@ -20,7 +20,7 @@
 	<input
 		type="text"
 		readonly
-		class="rounded-l-md pl-4 py-2 bg-neutral-200 text-ellipsis"
+		class="rounded-l-md pl-5 pb-2 pt-3 bg-neutral-200 text-ellipsis text-lg"
 		value={content}
 	/>
 	<button

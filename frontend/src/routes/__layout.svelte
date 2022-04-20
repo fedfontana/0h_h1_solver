@@ -1,12 +1,17 @@
-
 <script lang="ts">
 	import '$src/app.css';
 	import CopyInput from '$components/copy_input.svelte';
 	import Toast from '$components/toast.svelte';
 	import Button from '$components/button.svelte';
-	import type {Board as BoardType, BoardSize, SolutionResponse, ErrorResponse, CheckSolutionResponse } from '$src/types';
+	import type {
+		Board as BoardType,
+		BoardSize,
+		SolutionResponse,
+		ErrorResponse,
+		CheckSolutionResponse
+	} from '$src/types';
 	import { encodeBoardState, decodeBoardState, generateEmptyBoard } from '$src/lib/utils';
-	import {board_state, error_message, info_message, success_message} from '$src/stores';
+	import { board_state, error_message, info_message, success_message } from '$src/stores';
 
 	const API_URL = 'http://localhost:5000';
 	const WEBSITE_URL = 'http://localhost:3000';
@@ -19,8 +24,7 @@
 	$success_message = null;
 	$board_state = generateEmptyBoard(selected_size);
 
-	let is_solution: boolean|null = null;
-
+	let is_solution: boolean | null = null;
 
 	async function findSolutionHandler() {
 		let response = await fetch(`${API_URL}/get_solution/${encodeBoardState($board_state)}`);
@@ -40,21 +44,21 @@
 	}
 
 	function isBoardFull(board_state: BoardType): boolean {
-		for(let row of board_state) {
-			for(let tile of row) {
-				if(tile == 'x') return false;
+		for (let row of board_state) {
+			for (let tile of row) {
+				if (tile == 'x') return false;
 			}
 		}
 		return true;
 	}
 
 	async function checkSolutionHandler() {
-		if(!isBoardFull($board_state)) {
-			$info_message = "Please fill the board before checking the solution.";
-			return
+		if (!isBoardFull($board_state)) {
+			$info_message = 'Please fill the board before checking the solution.';
+			return;
 		}
-		let response= await fetch(`${API_URL}/check_solution/${encodeBoardState($board_state)}`);
-		let JSONRes: CheckSolutionResponse|ErrorResponse  = await response.json();
+		let response = await fetch(`${API_URL}/check_solution/${encodeBoardState($board_state)}`);
+		let JSONRes: CheckSolutionResponse | ErrorResponse = await response.json();
 		if (!response.ok) {
 			// catch all of the unhandled errors
 			$error_message = 'Something went wrong. Please try again.';
@@ -64,7 +68,9 @@
 	}
 </script>
 
-<div class="relative w-full h-full flex flex-col items-center justify-center gap-32 md:flex-row">
+<div
+	class="relative w-full h-full flex flex-col items-center justify-center gap-32 md:flex-row md:w-9/12 mx-auto"
+>
 	{#if $error_message != null}
 		<div class="fixed right-10 top-10">
 			<Toast
@@ -117,8 +123,9 @@
 		</div>
 	{/if}
 
-	<div>
-		<div class="flex flex-row md:flex-col">
+	<!-- LEFT SIDE -->
+	<div class="flex-[3]">
+		<div class="flex flex-row md:flex-col w-8/12 ml-auto mr-5">
 			{#each SIZES as size}
 				<button
 					class={`m-3 hover:opacity-50 hover:bg-neutral-300 ${
@@ -131,46 +138,56 @@
 						$info_message = null;
 					}}
 				>
-					<p class="text-3xl font-semibold">
+					<p class="text-4xl font-semibold">
 						{size}x{size}
 					</p>
 				</button>
 			{/each}
 		</div>
-		<div class="flex flex-row md:flex-col gap-4">
-			<Button 
-				clickHandler={() => {
-					$error_message = null;
-					findSolutionHandler();
-				}}
-				content="solve"
-				color="bg-blue-500"
-			/>
-			<Button 
-				clickHandler={() => {
-					$error_message = null;
-					checkSolutionHandler();
-				}}
-				content="check"
-				color="bg-green-500"
-			/>
-			<Button 
-				clickHandler={() => {
-					$error_message = null;
-					$board_state = generateEmptyBoard(selected_size);
-				}}
-				content="clear"
-				color="bg-red-500"
-			/>
-		</div>
-		<div class="mt-4 flex flex-col gap-2">
-			<h3 class="font-semibold text-lg">share this puzzle:</h3>
-			<CopyInput content={`${WEBSITE_URL}/board/${encodeBoardState($board_state)}`}/>
-		</div>
 	</div>
+	<!--/LEFT SIDE  -->
 
-	<div class="flex flex-col gap-20 w-[40%] items-center">
+	<!-- CENTER -->
+	<div class="flex flex-col gap-20 w-[40%] items-center flex-[4]">
 		<h1 class="text-8xl font-bold text-center w-full"><a href="/">0h h1 solver</a></h1>
 		<slot />
 	</div>
+	<!--/CENTER -->
+
+	<!-- RIGHT SIDE -->
+	<div class="flex-[3]">
+		<div class="mr-auto ml-5 w-8/12">
+			<div class="flex flex-row md:flex-col gap-4">
+				<Button
+					clickHandler={() => {
+						$error_message = null;
+						checkSolutionHandler();
+					}}
+					content="check"
+					color="bg-green-500"
+				/>
+				<Button
+					clickHandler={() => {
+						$error_message = null;
+						findSolutionHandler();
+					}}
+					content="solve"
+					color="bg-blue-500"
+				/>
+				<Button
+					clickHandler={() => {
+						$error_message = null;
+						$board_state = generateEmptyBoard(selected_size);
+					}}
+					content="clear"
+					color="bg-red-500"
+				/>
+			</div>
+			<div class="mt-16 flex flex-col gap-2">
+				<h3 class="font-semibold text-xl">share this puzzle:</h3>
+				<CopyInput content={`${WEBSITE_URL}/board/${encodeBoardState($board_state)}`} />
+			</div>
+		</div>
+	</div>
+	<!--/RIGHT SIDE -->
 </div>
