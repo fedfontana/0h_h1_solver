@@ -11,7 +11,7 @@ style stuff
 - dark mode
 - after clicking "check solution": 
   - error toast (probably different component, no close button, closes with timeout) that shakes sideways if wrong
-  -  green toast otherwise
+  - green toast otherwise
 - maybe add icons to buttons?
 
 - maybe on `board/<repr>` show only the board, the solve button and the check button and make it so that the clear button returns to the original url of the page (original puzzle)
