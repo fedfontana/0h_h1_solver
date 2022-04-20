@@ -17,7 +17,7 @@
 		success_message,
 		board_is_solution
 	} from '$src/stores';
-	import { encodeBoardState, decodeBoardState, generateEmptyBoard, copyBoard} from '$src/lib/utils';
+	import { encodeBoardState, decodeBoardState, generateEmptyBoard, copyBoard} from '$lib/utils';
 
 	import PuzzlePageLayout from '$components/layout.svelte';
     import Board from '$components/board.svelte';

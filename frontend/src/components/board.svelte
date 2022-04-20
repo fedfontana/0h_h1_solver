@@ -1,17 +1,18 @@
 <script lang="ts">
-	import { generateEmptyBoard } from '$src/lib/utils';
+	import { generateEmptyBoard } from '$lib/utils';
 	import { error_message } from '$src/stores';
 	import type { Board } from '$src/types';
-	
+
 	export let board_state = generateEmptyBoard(4);
 	export let highlight_original: boolean = false;
 	export let initial_state: Board | null = null;
-	export let readonly: boolean = true;
+	export let readonly: boolean = false;
 	export let can_edit_initial_state: boolean = true;
 
+	if (readonly) can_edit_initial_state = false;
+
 	if (
-		(can_edit_initial_state && !readonly) ||
-		(!can_edit_initial_state && initial_state === null) ||
+		(!readonly && !can_edit_initial_state && initial_state === null) ||
 		(highlight_original && initial_state === null)
 	) {
 		throw Error('Unacceptable comnbination of props');
@@ -26,7 +27,7 @@
 	}
 
 	function click_handler(row_idx: number, col_idx: number, is_right_click: boolean): void {
-		if (!readonly) {
+		if (readonly) {
 			$error_message = 'The board is read only.';
 			return;
 		}
@@ -74,10 +75,15 @@
 						board_classes_per_size[board_state.length]
 					} shadow-lg transition-colors duration-200
 					${
-						readonly &&
-						!can_edit_initial_state &&
-						initial_state !== null &&
-						initial_state[row_idx][col_idx] === 'x'
+						!readonly &&
+						(
+							(
+								!can_edit_initial_state &&
+								initial_state !== null &&
+								initial_state[row_idx][col_idx] === 'x'
+							) 
+							|| can_edit_initial_state
+						)
 							? 'hover:opacity-80 hover:scale-[98%]'
 							: ''
 					}
