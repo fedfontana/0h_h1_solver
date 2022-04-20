@@ -4,9 +4,6 @@
 
 ## TODO
 
-- error page?
-  - [this puzzle](http://localhost:3000/board/yyyxbbxxyyxx-yxxxbxbxyxyx-yyxxbbxxyyxx-yxxxbxbxyxyx-yyyxbxbxyxyx-xxxxxxxxxxxx-xxxxxxxxxxxx-xxbbbxyyxxxx-xxbxbxyxyxxx-xxbxbxyyxxxx-xxbxbxyxyxxx-xxbbbxyxyxxx)
-
 style stuff
 - dark mode
 - after clicking "check solution": 
@@ -14,10 +11,7 @@ style stuff
   - green toast otherwise
 - maybe add icons to buttons?
 
-- maybe on `board/<repr>` show only the board, the solve button and the check button and make it so that the clear button returns to the original url of the page (original puzzle)
-
 functionality stuff
-- maybe add possibilty to highlight initial state (easier way to copy solution)
 - add settings and about tab with:
   - theme
   - about and credits

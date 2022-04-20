@@ -12,7 +12,7 @@
 		CheckSolutionResponse
 	} from '$src/types';
 	import { API_URL, WEBSITE_URL, SIZES } from '$src/constants';
-	import { encodeBoardState, decodeBoardState, generateEmptyBoard } from '$src/lib/utils';
+	import { encodeBoardState, decodeBoardState, generateEmptyBoard, copyBoard } from '$src/lib/utils';
 	import {
 		board_state,
 		error_message,
@@ -27,6 +27,9 @@
 	$info_message = null;
 	$success_message = null;
 	$board_state = generateEmptyBoard(selected_size);
+
+	let pre_solution_board: BoardType |null = null;
+	let highlight_initial_board: boolean = false;
 
 	async function findSolutionHandler() {
 		let response = await fetch(`${API_URL}/get_solution/${encodeBoardState($board_state)}`);
@@ -48,6 +51,7 @@
 			$error_message = 'Something went wrong. Please try again.';
 			return;
 		}
+		pre_solution_board = copyBoard($board_state);
 		$board_state = decodeBoardState((JSONRes as SolutionResponse).solution);
 	}
 
@@ -97,6 +101,8 @@
 					selected_size == size ? 'bg-neutral-300 bg-opacity-70' : ''
 				} px-3 py-1 md:p-1 max-h-20 rounded-lg`}
 				on:click={() => {
+					highlight_initial_board = false;
+					pre_solution_board = null;
 					selected_size = size;
 					$board_state = generateEmptyBoard(size);
 					$error_message = null;
@@ -111,7 +117,7 @@
 	</div>
 
 	<div slot="center" class="h-[93vw] w-[93vw]  md:h-[30vw] md:w-[30vw]">
-		<Board bind:board_state={$board_state} />
+		<Board bind:board_state={$board_state} initial_state={pre_solution_board} highlight_original={highlight_initial_board && pre_solution_board !== null} />
 	</div>
 
 	<div slot="right">
@@ -138,11 +144,16 @@
 					$error_message = null;
 					$info_message = null;
 					$success_message = null;
+					pre_solution_board = null;
+					highlight_initial_board = false;
 					$board_state = generateEmptyBoard(selected_size);
 				}}
 				content="clear"
 				color="bg-red-500"
 			/>
+		</div>
+		<div>
+			<input class="bg-green-500 h-6 w-6" bind:checked={highlight_initial_board} type="checkbox"> highlight initial board state
 		</div>
 		<div class="mt-16 flex flex-col gap-2">
 			<h3 class="font-semibold text-xl">share this puzzle:</h3>

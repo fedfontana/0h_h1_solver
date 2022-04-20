@@ -17,3 +17,7 @@ export function generateEmptyBoard(size: BoardSize): Board {
     }
     return tmp;
 }
+
+export function copyBoard(board: Board): Board {
+    return board.map(row => row.slice());
+} 

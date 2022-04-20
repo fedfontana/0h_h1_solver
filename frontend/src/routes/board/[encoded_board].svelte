@@ -12,7 +12,7 @@
 		ErrorResponse,
 		CheckSolutionResponse
 	} from '$src/types';
-	import { encodeBoardState, decodeBoardState, generateEmptyBoard } from '$src/lib/utils';
+	import { encodeBoardState, decodeBoardState, generateEmptyBoard, copyBoard} from '$src/lib/utils';
 	import {
 		board_state,
 		error_message,
@@ -23,13 +23,11 @@
 
     let encoded_board = $page.params.encoded_board;
 
+	let highlight_initial_board: boolean = false;
+
 	const initial_board_state = decodeBoardState(encoded_board);
 	$board_state = copyBoard(initial_board_state); 
 
-    function copyBoard(board: BoardType): BoardType {
-        return board.map(row => row.slice());
-    } 
-        
 	async function findSolutionHandler() {
 		let response = await fetch(`${API_URL}/get_solution/${encodeBoardState($board_state)}`);
 		let status = response.status;
@@ -95,7 +93,7 @@
 	</div>
 
 	<div slot="center" class="h-[93vw] w-[93vw]  md:h-[30vw] md:w-[30vw]">
-		<Board bind:board_state={$board_state} />
+		<Board bind:board_state={$board_state} can_edit_initial_state={false} initial_state={initial_board_state} highlight_original={highlight_initial_board}/>
 	</div>
 
 	<div slot="right">
@@ -127,6 +125,9 @@
 				content="clear"
 				color="bg-red-500"
 			/>
+		</div>
+		<div>
+			<input bind:checked={highlight_initial_board} type="checkbox"> highlight initial board state
 		</div>
 		<div class="mt-16 flex flex-col gap-2">
 			<h3 class="font-semibold text-xl">share this puzzle:</h3>
