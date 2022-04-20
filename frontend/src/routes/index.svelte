@@ -1,5 +1,6 @@
 <script lang="ts">
 	import Board from '$components/board.svelte';
+	import Checkbox from '$components/checkbox.svelte';
 	import { onDestroy } from 'svelte';
 	import PuzzlePageLayout from '$components/layout.svelte';
 	import CopyInput from '$components/copy_input.svelte';
@@ -11,7 +12,7 @@
 		ErrorResponse,
 		CheckSolutionResponse
 	} from '$src/types';
-	import { API_URL, WEBSITE_URL, SIZES } from '$src/constants';
+	import { API_URL, SIZES } from '$src/constants';
 	import { encodeBoardState, decodeBoardState, generateEmptyBoard, copyBoard } from '$src/lib/utils';
 	import {
 		board_state,
@@ -20,7 +21,9 @@
 		success_message,
 		board_is_solution
 	} from '$src/stores';
+	import { page } from '$app/stores';
 
+	let base_website_url = $page.url.host;
 	let selected_size: BoardSize = 4;
 
 	$error_message = null;
@@ -152,12 +155,13 @@
 				color="bg-red-500"
 			/>
 		</div>
-		<div>
-			<input class="bg-green-500 h-6 w-6" bind:checked={highlight_initial_board} type="checkbox"> highlight initial board state
+		<div class="mt-10 flex items-center gap-3">
+			<Checkbox bind:checked={highlight_initial_board} disabled={pre_solution_board === null}/> 
+			<p class={`text-lg font-semibold ${pre_solution_board === null ? 'opacity-60' : ''}`}>highlight initial board state</p>
 		</div>
 		<div class="mt-16 flex flex-col gap-2">
 			<h3 class="font-semibold text-xl">share this puzzle:</h3>
-			<CopyInput content={`${WEBSITE_URL}/board/${encodeBoardState($board_state)}`} />
+			<CopyInput content={`${base_website_url}/board/${encodeBoardState($board_state)}`} />
 		</div>
 	</div>
 </PuzzlePageLayout>

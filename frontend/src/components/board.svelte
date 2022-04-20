@@ -51,23 +51,7 @@
 		'10': 'rounded-lg md:rounded-xl gap-[0.125rem] md:gap-2',
 		'12': 'rounded-md md:rounded-xl gap-[0.125rem] md:gap-1'
 	};
-
-	/* const lock_classes_per_size = {
-		"4": "w-10 h-10 md:w-12 h-12",
-		"6": "w-10 h-10 md:w-10 h-10",
-		"8": "w-10 h-10 md:w-10 h-10",
-		"10": "w-10 h-10 md:w-8 h-8",
-		"12": "w-10 h-10 md:w-10 h-10"
-	} */
 </script>
-
-<!--TODO fix bugs:
-- quando si sceglie una size, si risovle e si selezionano i lucchetti, poi quando si cambia size si puo'
- cambiare size solo per una prima volta e la board viene tutta fuckappata
-- quando si selezionano i lock poi non si possono togliere (stato non viene riflesso su board) 
-- non so come siano le size dei lock su mobile
-
--->
 
 <div
 	class={`flex flex-col h-full w-full justify-between ${
@@ -102,7 +86,7 @@
 				>
 					{#if highlight_original && initial_state !== null && initial_state[row_idx][col_idx] !== 'x'}
 						<svg
-							class="w-[40%] h-[40%]"
+							class="w-[40%] h-[40%] text-neutral-800 opacity-90"
 							xmlns="http://www.w3.org/2000/svg"
 							width="16"
 							height="16"

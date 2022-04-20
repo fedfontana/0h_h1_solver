@@ -5,7 +5,8 @@
 	import PuzzlePageLayout from '$components/layout.svelte';
 	import CopyInput from '$components/copy_input.svelte';
 	import Button from '$components/button.svelte';
-    import { API_URL, WEBSITE_URL} from '$src/constants';
+    import { API_URL} from '$src/constants';
+	import Checkbox from '$components/checkbox.svelte';
 	import type {
 		Board as BoardType,
 		SolutionResponse,
@@ -22,7 +23,7 @@
 	} from '$src/stores';
 
     let encoded_board = $page.params.encoded_board;
-
+	let base_website_url = $page.url.host;
 	let highlight_initial_board: boolean = false;
 
 	const initial_board_state = decodeBoardState(encoded_board);
@@ -126,12 +127,13 @@
 				color="bg-red-500"
 			/>
 		</div>
-		<div>
-			<input bind:checked={highlight_initial_board} type="checkbox"> highlight initial board state
+		<div class="mt-10 flex items-center gap-3">
+			<Checkbox bind:checked={highlight_initial_board}/> 
+			<p class="text-lg font-semibold">highlight initial board state</p>
 		</div>
 		<div class="mt-16 flex flex-col gap-2">
 			<h3 class="font-semibold text-xl">share this puzzle:</h3>
-			<CopyInput content={`${WEBSITE_URL}/board/${encodeBoardState($board_state)}`} />
+			<CopyInput content={`${base_website_url}/board/${encodeBoardState($board_state)}`} />
 		</div>
 	</div>
 </PuzzlePageLayout>

@@ -19,7 +19,9 @@ functionality stuff
   - keyboard shortcuts info
 
 code stuff
-- `WEBSITE_URL` may be useless, just get the url from the sveltekit store (`$page.something.somethingelse`?)
+- instead of using an api, just use a webworker js script
+- consistent variable/prop naming scheme
+- reorder imports
 
 utility stuff
 - cltr+l clears the board
