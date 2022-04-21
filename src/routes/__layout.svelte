@@ -1,6 +1,9 @@
 <script lang="ts">
 	import '$src/app.css';
 
+	import { onMount } from 'svelte';
+	import { goto } from '$app/navigation';
+
 	import { error_message, info_message, board_is_solution } from '$src/stores';
 
 	import Toast from '$components/toast.svelte';
@@ -8,6 +11,12 @@
 	$error_message = null;
 	$info_message = null;
 	$board_is_solution = null;
+
+	onMount(() => {
+		window.onunhandledrejection = () => {
+			goto("/error");
+		}
+	})
 </script>
 
 <div class="relative w-full flex flex-col py-12 md:w-8/12 mx-auto md:h-[95%]">

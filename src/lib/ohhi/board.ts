@@ -7,6 +7,12 @@ export class Board {
         this.size = initial_state.length;
         if(initial_state.length % 2 != 0 || initial_state.length <= 0 || initial_state[0].length != initial_state.length)
             throw new IllegalArgumentException('Illegal board size');
+        for(const row of initial_state) {
+            if(row.length !== this.size)
+                throw new IllegalArgumentException('Illegal board size'); 
+        }
+    
+
         this.state = initial_state;
     }
 
