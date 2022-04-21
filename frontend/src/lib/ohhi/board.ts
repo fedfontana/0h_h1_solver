@@ -31,7 +31,7 @@ export function string_to_tile(encoded_tile: string): Tile {
     }
 }
 
-export default class Board {
+export class Board {
     size: number;
     state: Tile[][];
     constructor(initial_state: Tile[][]) {
@@ -57,7 +57,7 @@ export default class Board {
         return this.state.map((row) => row.join('')).join('-');
     }
 
-    decode(encoded_board: string): Board {
+    static decode(encoded_board: string): Board {
         return new Board(encoded_board.split('-').map((encoded_row) => encoded_row.split('').map(tile_repr => string_to_tile(tile_repr))));
     }
 
@@ -114,6 +114,15 @@ export default class Board {
             }
         }
         return board_copy;
+    }
+
+    is_full(): boolean {
+        for(let row_idx = 0; row_idx < this.size; row_idx++) {
+            for(let col_idx = 0; col_idx < this.size; col_idx++) {
+                if(this.at(row_idx, col_idx) == Tile.Empty) return true;
+            }
+        }
+        return false;
     }
 
 

@@ -1,9 +1,8 @@
 <script>
-    import { decodeBoardState } from "$lib/utils";
-
     import Board from "$src/components/board.svelte";
-    
-    const error_board = decodeBoardState('yyyxbbxxyyxx-yxxxbxbxyxyx-yyxxbbxxyyxx-yxxxbxbxyxyx-yyyxbxbxyxyx-xxxxxxxxxxxx-xxxxxxxxxxxx-xxbbbxyyxxxx-xxbxbxyxyxxx-xxbxbxyyxxxx-xxbxbxyxyxxx-xxbbbxyxyxxx');
+    import {Board as OhhiBoard} from '$lib/ohhi/board';
+
+    const error_board = OhhiBoard.decode('yyyxbbxxyyxx-yxxxbxbxyxyx-yyxxbbxxyyxx-yxxxbxbxyxyx-yyyxbxbxyxyx-xxxxxxxxxxxx-xxxxxxxxxxxx-xxbbbxyyxxxx-xxbxbxyxyxxx-xxbxbxyyxxxx-xxbxbxyxyxxx-xxbbbxyxyxxx');
 </script>
 
 <div class="flex flex-col items-center justify-center gap-16 h-[92%]">

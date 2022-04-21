@@ -1,4 +1,4 @@
-import Board, { IllegalArgumentException, NoSolutionFound, Tile } from "./board";
+import { Board, IllegalArgumentException, NoSolutionFound, Tile } from "./board";
 
 export class Solver {
     static solve(board: Board): Board {
