@@ -4,7 +4,7 @@
 	import type { BoardSize } from '$src/types';
 
 	import { SIZES } from '$src/constants';
-	import { error_message, info_message, success_message, board_is_solution } from '$src/stores';
+	import { error_message, info_message, board_is_solution, clear_stores } from '$src/stores';
 
 	import { Board as OhhiBoard } from '$lib/ohhi/board';
 	import { NoSolutionFound } from '$lib/ohhi/exceptions';
@@ -23,10 +23,9 @@
 	let pre_solution_board: OhhiBoard | null = null;
 	let highlight_initial_board: boolean = false;
 
-	async function findSolutionHandler() {
+	async function find_solution() {
 		if (board_state.is_full()) {
 			$error_message = null;
-			$success_message = null;
 			$board_is_solution = null;
 			$info_message = 'The board is already full';
 			return;
@@ -36,33 +35,48 @@
 			pre_solution_board = board_state.copy();
 			board_state = Solver.solve(board_state);
 		} catch (err) {
-			console.log('Index: ', err);
 			pre_solution_board = null;
 			if (err instanceof NoSolutionFound) {
 				$info_message = null;
-				$success_message = null;
 				$board_is_solution = null;
 				$error_message = 'No solution found for this board';
 				return;
 			}
 			$info_message = null;
-			$success_message = null;
 			$board_is_solution = null;
 			$error_message = 'Something went wrong. Please try again.';
 		}
 	}
 
-	async function checkSolutionHandler() {
+	async function check_solution() {
 		if (!board_state.is_full()) {
 			$error_message = null;
-			$success_message = null;
 			$board_is_solution = null;
 			$info_message = 'Please fill the board before checking the solution.';
 			return;
 		}
 		$board_is_solution = board_state.is_solution();
 	}
+
+	function shortcuts_handler(e: KeyboardEvent): void {
+		if (e.ctrlKey && e.shiftKey && e.key.toLowerCase() === 'l') {
+			clear_stores();
+			pre_solution_board = null;
+			highlight_initial_board = false;
+			board_state = OhhiBoard.empty_of_size(selected_size);
+		} else if (e.ctrlKey && !e.shiftKey && e.key.toLowerCase() === 'enter') {
+			clear_stores();
+			check_solution();
+		} else if (e.ctrlKey && e.shiftKey && e.key.toLowerCase() === 'enter') {
+			clear_stores();
+			find_solution();
+		} else if (e.key.toLowerCase() === 'escape') {
+			clear_stores();
+		}
+	}
 </script>
+
+<svelte:body on:keydown={shortcuts_handler} />
 
 <PuzzlePageLayout>
 	<div
@@ -79,8 +93,7 @@
 					pre_solution_board = null;
 					selected_size = size;
 					board_state = OhhiBoard.empty_of_size(size);
-					$error_message = null;
-					$info_message = null;
+					clear_stores();
 				}}
 			>
 				<p class="text-3xl md:text-4xl font-semibold">
@@ -102,26 +115,23 @@
 		<div class="flex flex-row md:flex-col gap-4">
 			<Button
 				click_handler={() => {
-					$error_message = null;
-					checkSolutionHandler();
+					clear_stores();
+					check_solution();
 				}}
 				content="check"
 				color="bg-green-500"
 			/>
 			<Button
 				click_handler={() => {
-					$error_message = null;
-					$info_message = null;
-					findSolutionHandler();
+					clear_stores();
+					find_solution();
 				}}
 				content="solve"
 				color="bg-blue-500"
 			/>
 			<Button
 				click_handler={() => {
-					$error_message = null;
-					$info_message = null;
-					$success_message = null;
+					clear_stores();
 					pre_solution_board = null;
 					highlight_initial_board = false;
 					board_state = OhhiBoard.empty_of_size(selected_size);
