@@ -1,6 +1,5 @@
 <script lang="ts">
     import { page } from '$app/stores';
-	import { onDestroy } from 'svelte';
 
 	import type {
 		Board as BoardType,
@@ -11,13 +10,12 @@
 
     import { API_URL} from '$src/constants';
 	import {
-		board_state,
 		error_message,
 		info_message,
 		success_message,
 		board_is_solution
 	} from '$src/stores';
-	import { encodeBoardState, decodeBoardState, generateEmptyBoard, copyBoard} from '$lib/utils';
+	import { encodeBoardState, decodeBoardState, copyBoard} from '$lib/utils';
 
 	import PuzzlePageLayout from '$components/layout.svelte';
     import Board from '$components/board.svelte';
@@ -27,14 +25,14 @@
 
 	let encoded_board = $page.params.encoded_board;
 	const initial_board_state = decodeBoardState(encoded_board);
-	$board_state = copyBoard(initial_board_state); 
+	let board_state = copyBoard(initial_board_state); 
 
 	const base_website_url = $page.url.host;
 	let highlight_initial_board: boolean = false;
 
 
 	async function findSolutionHandler() {
-		let response = await fetch(`${API_URL}/get_solution/${encodeBoardState($board_state)}`);
+		let response = await fetch(`${API_URL}/get_solution/${encodeBoardState(board_state)}`);
 		let status = response.status;
 		let JSONRes: SolutionResponse | ErrorResponse = await response.json();
 		if (status == 404) {
@@ -53,7 +51,7 @@
 			$error_message = 'Something went wrong. Please try again.';
 			return;
 		}
-		$board_state = decodeBoardState((JSONRes as SolutionResponse).solution);
+		board_state = decodeBoardState((JSONRes as SolutionResponse).solution);
 	}
 
 	function isBoardFull(board_state: BoardType): boolean {
@@ -66,14 +64,14 @@
 	}
 
 	async function checkSolutionHandler() {
-		if (!isBoardFull($board_state)) {
+		if (!isBoardFull(board_state)) {
 			$error_message = null;
 			$success_message = null;
 			$board_is_solution = null;
 			$info_message = 'Please fill the board before checking the solution.';
 			return;
 		}
-		let response = await fetch(`${API_URL}/check_solution/${encodeBoardState($board_state)}`);
+		let response = await fetch(`${API_URL}/check_solution/${encodeBoardState(board_state)}`);
 		let JSONRes: CheckSolutionResponse | ErrorResponse = await response.json();
 		if (!response.ok) {
 			// catch all of the unhandled errors
@@ -85,10 +83,6 @@
 		}
 		$board_is_solution = (JSONRes as CheckSolutionResponse).is_solution;
 	}
-
-	onDestroy(() => {
-		$board_state = generateEmptyBoard(4);
-	});
 </script>
 
 <PuzzlePageLayout>
@@ -98,7 +92,7 @@
 	</div>
 
 	<div slot="center" class="h-[93vw] w-[93vw]  md:h-[30vw] md:w-[30vw]">
-		<Board bind:board_state={$board_state} can_edit_initial_state={false} initial_state={initial_board_state} highlight_original={highlight_initial_board}/>
+		<Board bind:board_state={board_state} can_edit_initial_state={false} initial_state={initial_board_state} highlight_original={highlight_initial_board}/>
 	</div>
 
 	<div slot="right">
@@ -125,7 +119,7 @@
 					$error_message = null;
 					$info_message = null;
 					$success_message = null;
-					$board_state = copyBoard(initial_board_state);
+					board_state = copyBoard(initial_board_state);
 				}}
 				content="clear"
 				color="bg-red-500"
@@ -137,7 +131,7 @@
 		</div>
 		<div class="mt-16 flex flex-col gap-2">
 			<h3 class="font-semibold text-xl">share this puzzle:</h3>
-			<CopyInput content={`${base_website_url}/board/${encodeBoardState($board_state)}`} />
+			<CopyInput content={`${base_website_url}/board/${encodeBoardState(board_state)}`} />
 		</div>
 	</div>
 </PuzzlePageLayout>
