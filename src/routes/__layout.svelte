@@ -72,5 +72,5 @@
 	<slot />
 </div>
 <footer class="flex w-full justify-center text-center items-center pb-5 md:h-[5%]">
-	<p class="text-lg">made with 🧩 by <a class="text-blue-500 hover:underline decoration-2" href="https://fedfontana.dev">fedfontana</a>. Source code available on <a class="text-blue-500 hover:underline decoration-2" href="https://github.com/fedfontana/0hh1_solver">github</a></p>
+	<p class="text-lg">made with 🧩 by <a class="text-blue-500 hover:underline decoration-2" href="https://fedfontana.dev">fedfontana</a>. Source code available on <a class="text-blue-500 hover:underline decoration-2" href="https://github.com/fedfontana/0h_h1_solver">github</a></p>
 </footer>
