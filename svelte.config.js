@@ -11,10 +11,12 @@ const config = {
     ],
 
     kit: {
-        prerender: {
+        /* prerender: {
             default: true,
-        },
-        adapter: adapter(),
+        }, */
+        adapter: adapter({
+            fallback: 'index.html',
+        }),
         vite: {
             resolve: {
                 alias: {
