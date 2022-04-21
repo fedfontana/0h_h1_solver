@@ -23,11 +23,65 @@ export class Solver {
     }
 
     static fill_doubles_sides(board: Board): Board {
-        throw Error();
+        const new_board = board.copy();
+        for(let row_idx = 0; row_idx < new_board.size; row_idx++) {
+            let first_yellow_idx = -1;
+            let first_blue_idx = -1;
+            let yellow_count = 0;
+            let blue_count = 0;
+            for(let col_idx = 0; col_idx < new_board.size; col_idx++) {
+                switch(new_board.at(row_idx, col_idx)) {
+                    case Tile.Yellow:
+                        if(yellow_count == 0 || col_idx == 0) {
+                            first_blue_idx = -1;
+                            first_yellow_idx = col_idx;
+                        }
+                        blue_count = 0;
+                        yellow_count++
+
+                        if(yellow_count == 2) {
+                            if(first_yellow_idx > 0 && first_yellow_idx < new_board.size)
+                                new_board.state[row_idx][col_idx-1] = Tile.Blue; 
+                            if(first_yellow_idx+2 > 0 && first_yellow_idx+2 < new_board.size)
+                                new_board.state[row_idx][col_idx+2] = Tile.Blue; 
+                        }
+                        break;
+                    case Tile.Blue:
+                        if(blue_count == 0 || col_idx == 0) {
+                            first_yellow_idx = -1;
+                            first_blue_idx = col_idx;
+                        }
+                        yellow_count = 0;
+                        blue_count++
+
+                        if(blue_count == 2) {
+                            if(first_blue_idx > 0 && first_blue_idx < new_board.size)
+                                new_board.state[row_idx][col_idx-1] = Tile.Yellow; 
+                            if(first_blue_idx+2 > 0 && first_blue_idx+2 < new_board.size)
+                                new_board.state[row_idx][col_idx+2] = Tile.Yellow; 
+                        }
+                        break;
+                    case Tile.Empty:
+                        first_yellow_idx = -1;
+                        first_blue_idx = -1;
+                        yellow_count = 0;
+                        blue_count = 0;
+                }
+            }
+        }
+        return new_board;
     }
     static fill_middle_tiles(board: Board): Board {
-        throw Error();
-
+        const new_board = board.copy();
+        for(let row_idx = 0; row_idx < new_board.size; row_idx++) {
+            for(let col_idx = 0; col_idx < new_board.size-2; col_idx++) {
+                if(new_board.at(row_idx, col_idx) == Tile.Yellow && new_board.at(row_idx, col_idx+2) == Tile.Yellow)
+                    new_board.state[row_idx][col_idx] = Tile.Blue;
+                else if(new_board.at(row_idx, col_idx) == Tile.Blue && new_board.at(row_idx, col_idx+2) == Tile.Blue)
+                    new_board.state[row_idx][col_idx] = Tile.Yellow;
+            }
+        }
+        return new_board;
     }
     static fill_uneven_rows(board: Board): Board {
         const new_board = board.copy();
