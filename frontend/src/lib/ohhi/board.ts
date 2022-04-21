@@ -119,10 +119,10 @@ export class Board {
     is_full(): boolean {
         for(let row_idx = 0; row_idx < this.size; row_idx++) {
             for(let col_idx = 0; col_idx < this.size; col_idx++) {
-                if(this.at(row_idx, col_idx) == Tile.Empty) return true;
+                if(this.at(row_idx, col_idx) == Tile.Empty) return false;
             }
         }
-        return false;
+        return true;
     }
 
 
