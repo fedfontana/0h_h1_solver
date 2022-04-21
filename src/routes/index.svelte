@@ -146,7 +146,7 @@
 				highlight initial board state
 			</p>
 		</div>
-		<div class="mt-16 flex flex-col gap-2">
+		<div class="mt-16 flex flex-col items-center md:items-start gap-2">
 			<h3 class="font-semibold text-xl">share this puzzle:</h3>
 			<CopyInput content={`${$page.url.host}/board/${board_state.encode()}`} />
 		</div>
