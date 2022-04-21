@@ -13,7 +13,8 @@
 		board_is_solution
 	} from '$src/stores';
 
-	import {Board as OhhiBoard, NoSolutionFound} from '$lib/ohhi/board';
+	import {Board as OhhiBoard} from '$lib/ohhi/board';
+	import { NoSolutionFound } from '$lib/ohhi/exceptions';
 
 	import PuzzlePageLayout from '$components/layout.svelte';
 	import Board from '$components/board.svelte';
@@ -34,6 +35,14 @@
 	let highlight_initial_board: boolean = false;
 
 	async function findSolutionHandler() {
+		if(board_state.is_full()) {
+			$error_message = null;
+			$success_message = null;
+			$board_is_solution = null;
+			$info_message = 'The board is already full';
+			return;
+		}
+
 		try {
 			pre_solution_board = board_state.copy();
 			board_state = Solver.solve(board_state);

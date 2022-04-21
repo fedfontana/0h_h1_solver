@@ -1,5 +1,7 @@
-import { Board, IllegalArgumentException, NoSolutionFound, Tile } from './board';
-
+import { Board } from './board';
+import { Tile } from './tile';
+import { NoSolutionFound } from './exceptions';
+import { count_empty_tiles, count_non_empty_tiles, non_empty_elems_are_equal } from './utils'
 export class Solver {
 	static solve(board: Board): Board {
 		let old_board = Board.empty_of_size(2);
@@ -128,33 +130,4 @@ export class Solver {
 		}
 		return new_board;
 	}
-}
-
-function count_non_empty_tiles(row: Tile[]): { yellow_count: number; blue_count: number } {
-	const res = {
-		yellow_count: 0,
-		blue_count: 0
-	};
-	for (const tile of row) {
-		if (tile == Tile.Blue) res.blue_count++;
-		if (tile == Tile.Yellow) res.yellow_count++;
-	}
-	return res;
-}
-
-function non_empty_elems_are_equal(row: Tile[], full_row: Tile[]): boolean {
-	if (row.length != full_row.length) throw new IllegalArgumentException('Different sizes');
-	for (let i = 0; i < row.length; i++) {
-		if (row[i] == Tile.Empty) continue;
-		if (row[i] !== full_row[i]) return false;
-	}
-	return true;
-}
-
-function count_empty_tiles(row: Tile[]): number {
-	let count = 0;
-	for (const tile of row) {
-		if (tile == Tile.Empty) count++;
-	}
-	return count;
 }

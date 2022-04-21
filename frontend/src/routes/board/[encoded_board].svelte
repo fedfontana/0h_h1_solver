@@ -1,8 +1,8 @@
 <script lang="ts">
 	import { page } from '$app/stores';
 
-	import { Board as OhhiBoard, NoSolutionFound } from '$lib/ohhi/board';
-
+	import { Board as OhhiBoard } from '$lib/ohhi/board';
+	import { NoSolutionFound } from '$lib/ohhi/exceptions';
 	import { error_message, info_message, success_message, board_is_solution } from '$src/stores';
 
 	import PuzzlePageLayout from '$components/layout.svelte';

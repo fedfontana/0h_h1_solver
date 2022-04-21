@@ -1,7 +1,8 @@
 <script lang="ts">
 	import { error_message } from '$src/stores';
-	import { Board, Tile } from '$lib/ohhi/board';
-
+	import { Board } from '$lib/ohhi/board';
+	import { Tile } from '$lib/ohhi/tile';
+	
 	export let board_state: Board = Board.empty_of_size(4);
 	export let highlight_original: boolean = false;
 	export let initial_state: Board | null = null;
@@ -30,7 +31,7 @@
 			return;
 		}
 
-		if (!can_edit_initial_state && initial_state![row_idx][col_idx] !== 'x') {
+		if (!can_edit_initial_state && initial_state!.state[row_idx][col_idx] !== Tile.Empty) {
 			$error_message = 'Cannot edit the initial state of the board';
 			return;
 		}
