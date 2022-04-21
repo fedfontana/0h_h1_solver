@@ -12,14 +12,20 @@
 	import Checkbox from '$components/checkbox.svelte';
 	import { Solver } from '$src/lib/ohhi/solver';
 
-	let encoded_board = $page.params.encoded_board;
-	const initial_board_state = OhhiBoard.decode(encoded_board);
+	const initial_board_state = OhhiBoard.decode($page.params.encoded_board);
 	let board_state = initial_board_state.copy();
 
-	const base_website_url = $page.url.host;
 	let highlight_initial_board: boolean = false;
 
 	async function findSolutionHandler() {
+		if (board_state.is_full()) {
+			$error_message = null;
+			$success_message = null;
+			$board_is_solution = null;
+			$info_message = 'The board is already full';
+			return;
+		}
+
 		try {
 			board_state = Solver.solve(board_state);
 		} catch (err) {
@@ -97,7 +103,7 @@
 		</div>
 		<div class="mt-16 flex flex-col gap-2">
 			<h3 class="font-semibold text-xl">share this puzzle:</h3>
-			<CopyInput content={`${base_website_url}/board/${board_state.encode()}`} />
+			<CopyInput content={`${$page.url.host}/board/${board_state.encode()}`} />
 		</div>
 	</div>
 </PuzzlePageLayout>

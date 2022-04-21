@@ -2,7 +2,7 @@
 	import '$src/app.css';
 
 	import { error_message, info_message, success_message, board_is_solution } from '$src/stores';
-	
+
 	import Toast from '$components/toast.svelte';
 
 	$error_message = null;

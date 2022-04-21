@@ -1,19 +1,12 @@
 <script lang="ts">
 	import { page } from '$app/stores';
-	
-	import type {
-		BoardSize,
-	} from '$src/types';
+
+	import type { BoardSize } from '$src/types';
 
 	import { SIZES } from '$src/constants';
-	import {
-		error_message,
-		info_message,
-		success_message,
-		board_is_solution
-	} from '$src/stores';
+	import { error_message, info_message, success_message, board_is_solution } from '$src/stores';
 
-	import {Board as OhhiBoard} from '$lib/ohhi/board';
+	import { Board as OhhiBoard } from '$lib/ohhi/board';
 	import { NoSolutionFound } from '$lib/ohhi/exceptions';
 
 	import PuzzlePageLayout from '$components/layout.svelte';
@@ -23,19 +16,15 @@
 	import Button from '$components/button.svelte';
 	import { Solver } from '$lib/ohhi/solver';
 
-	let base_website_url = $page.url.host;
 	let selected_size: BoardSize = 4;
 
-	$error_message = null;
-	$info_message = null;
-	$success_message = null;
 	let board_state = OhhiBoard.empty_of_size(selected_size);
 
-	let pre_solution_board: OhhiBoard |null = null;
+	let pre_solution_board: OhhiBoard | null = null;
 	let highlight_initial_board: boolean = false;
 
 	async function findSolutionHandler() {
-		if(board_state.is_full()) {
+		if (board_state.is_full()) {
 			$error_message = null;
 			$success_message = null;
 			$board_is_solution = null;
@@ -102,7 +91,11 @@
 	</div>
 
 	<div slot="center" class="h-[93vw] w-[93vw] md:h-[30vw] md:w-[30vw]">
-		<Board bind:board_state={board_state} initial_state={pre_solution_board} highlight_original={highlight_initial_board && pre_solution_board !== null} />
+		<Board
+			bind:board_state
+			initial_state={pre_solution_board}
+			highlight_original={highlight_initial_board && pre_solution_board !== null}
+		/>
 	</div>
 
 	<div slot="right">
@@ -138,12 +131,14 @@
 			/>
 		</div>
 		<div class="mt-10 flex items-center gap-3">
-			<Checkbox bind:checked={highlight_initial_board} disabled={pre_solution_board === null}/> 
-			<p class={`text-lg font-semibold ${pre_solution_board === null ? 'opacity-60' : ''}`}>highlight initial board state</p>
+			<Checkbox bind:checked={highlight_initial_board} disabled={pre_solution_board === null} />
+			<p class={`text-lg font-semibold ${pre_solution_board === null ? 'opacity-60' : ''}`}>
+				highlight initial board state
+			</p>
 		</div>
 		<div class="mt-16 flex flex-col gap-2">
 			<h3 class="font-semibold text-xl">share this puzzle:</h3>
-			<CopyInput content={`${base_website_url}/board/${board_state.encode()}`} />
+			<CopyInput content={`${$page.url.host}/board/${board_state.encode()}`} />
 		</div>
 	</div>
 </PuzzlePageLayout>
