@@ -45,7 +45,7 @@ export class Board {
         const arr: Tile[][] = [];
         for(let i = 0; i < size; i++) {
             const row: Tile[] = [];
-            for(let j = 0; i < size; j++) {
+            for(let j = 0; j < size; j++) {
                 row.push(Tile.Empty);
             }
             arr.push(row);
@@ -54,7 +54,7 @@ export class Board {
     }
 
     encode(): string {
-        return this.state.map((row) => row.join('')).join('-');
+        return this.state.map((row) => row.map(tile => tile_to_string(tile)).join('')).join('-');
     }
 
     static decode(encoded_board: string): Board {
@@ -110,7 +110,7 @@ export class Board {
         const board_copy = Board.empty_of_size(this.size);
         for(let row_idx = 0; row_idx < board_copy.size; row_idx++) {
             for(let col_idx = 0; col_idx < board_copy.size; col_idx++) {
-                board_copy[row_idx][col_idx] = this.at(col_idx, row_idx);
+                board_copy.state[row_idx][col_idx] = (this.at(col_idx, row_idx) as Tile);
             }
         }
         return board_copy;

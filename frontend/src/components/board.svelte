@@ -1,6 +1,6 @@
 <script lang="ts">
 	import { error_message } from '$src/stores';
-	import Board, { Tile } from '$lib/ohhi/board';
+	import { Board, Tile } from '$lib/ohhi/board';
 
 	export let board_state: Board = Board.empty_of_size(4);
 	export let highlight_original: boolean = false;

@@ -38,6 +38,7 @@
 			pre_solution_board = board_state.copy();
 			board_state = Solver.solve(board_state);
 		} catch (err) {
+			console.log('Index: ', err);
 			pre_solution_board = null;
 			if (err instanceof NoSolutionFound) {
 				$info_message = null;
