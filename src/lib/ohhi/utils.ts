@@ -1,4 +1,5 @@
-import { Tile, IllegalArgumentException } from './board';
+import { Tile } from './tile';
+import { IllegalArgumentException } from './exceptions';
 
 export function count_non_empty_tiles(row: Tile[]): { yellow_count: number; blue_count: number } {
 	const res = {
