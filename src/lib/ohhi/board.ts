@@ -1,37 +1,6 @@
-export enum Tile {
-    Empty = 1,
-    Blue,
-    Yellow,
-}
-
-export class IllegalArgumentException extends Error {}; 
-export class NoSolutionFound extends Error {};
-
-export function tile_to_string(tile: Tile): string {
-    switch(tile) {
-        case Tile.Empty:
-            return 'x';
-        case Tile.Blue:
-            return 'b';
-        case Tile.Yellow:
-            return 'y';
-    }
-}
-
-export function string_to_tile(encoded_tile: string): Tile {
-    switch(encoded_tile) {
-        case 'x':
-            return Tile.Empty;
-        case 'b':
-            return Tile.Blue;
-        case 'y':
-            return Tile.Yellow;
-        default:
-            throw new IllegalArgumentException('String representation does not corrispond to any tile.');
-    }
-}
-
-export default class Board {
+import { IllegalArgumentException } from "./exceptions";
+import { tile_to_string, Tile, string_to_tile } from "./tile";
+export class Board {
     size: number;
     state: Tile[][];
     constructor(initial_state: Tile[][]) {
@@ -45,7 +14,7 @@ export default class Board {
         const arr: Tile[][] = [];
         for(let i = 0; i < size; i++) {
             const row: Tile[] = [];
-            for(let j = 0; i < size; j++) {
+            for(let j = 0; j < size; j++) {
                 row.push(Tile.Empty);
             }
             arr.push(row);
@@ -54,10 +23,10 @@ export default class Board {
     }
 
     encode(): string {
-        return this.state.map((row) => row.join('')).join('-');
+        return this.state.map((row) => row.map(tile => tile_to_string(tile)).join('')).join('-');
     }
 
-    decode(encoded_board: string): Board {
+    static decode(encoded_board: string): Board {
         return new Board(encoded_board.split('-').map((encoded_row) => encoded_row.split('').map(tile_repr => string_to_tile(tile_repr))));
     }
 
@@ -110,10 +79,19 @@ export default class Board {
         const board_copy = Board.empty_of_size(this.size);
         for(let row_idx = 0; row_idx < board_copy.size; row_idx++) {
             for(let col_idx = 0; col_idx < board_copy.size; col_idx++) {
-                board_copy[row_idx][col_idx] = this.at(col_idx, row_idx);
+                board_copy.state[row_idx][col_idx] = (this.at(col_idx, row_idx) as Tile);
             }
         }
         return board_copy;
+    }
+
+    is_full(): boolean {
+        for(let row_idx = 0; row_idx < this.size; row_idx++) {
+            for(let col_idx = 0; col_idx < this.size; col_idx++) {
+                if(this.at(row_idx, col_idx) == Tile.Empty) return false;
+            }
+        }
+        return true;
     }
 
 

@@ -1,5 +1,3 @@
-export type Tile =  'x' | 'y' | 'b';
-export type Board = Tile[][];
 export type ToastType = 'error' | 'info' | 'success';
 export type BoardSize = 4 | 6 | 8 | 10 | 12;
 

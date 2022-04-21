@@ -1,9 +1,9 @@
 <script lang="ts">
-	import { generateEmptyBoard } from '$lib/utils';
 	import { error_message } from '$src/stores';
-	import type { Board } from '$src/types';
-
-	export let board_state = generateEmptyBoard(4);
+	import { Board } from '$lib/ohhi/board';
+	import { Tile } from '$lib/ohhi/tile';
+	
+	export let board_state: Board = Board.empty_of_size(4);
 	export let highlight_original: boolean = false;
 	export let initial_state: Board | null = null;
 	export let readonly: boolean = false;
@@ -20,8 +20,7 @@
 
 	if (
 		initial_state !== null &&
-		(initial_state.length !== board_state.length ||
-			(initial_state.length > 0 && initial_state[0].length !== initial_state[0].length))
+		initial_state.size !== board_state.size
 	) {
 		throw Error('initial_board and board_state sizes must match');
 	}
@@ -32,17 +31,17 @@
 			return;
 		}
 
-		if (!can_edit_initial_state && initial_state![row_idx][col_idx] !== 'x') {
+		if (!can_edit_initial_state && initial_state!.state[row_idx][col_idx] !== Tile.Empty) {
 			$error_message = 'Cannot edit the initial state of the board';
 			return;
 		}
 
-		if (board_state[row_idx][col_idx] == 'y') {
-			board_state[row_idx][col_idx] = is_right_click ? 'x' : 'b';
-		} else if (board_state[row_idx][col_idx] == 'b') {
-			board_state[row_idx][col_idx] = is_right_click ? 'y' : 'x';
-		} else if (board_state[row_idx][col_idx] == 'x') {
-			board_state[row_idx][col_idx] = is_right_click ? 'b' : 'y';
+		if (board_state.at(row_idx, col_idx) == Tile.Yellow) {
+			board_state.state[row_idx][col_idx] = is_right_click ? Tile.Empty : Tile.Blue;
+		} else if (board_state.at(row_idx, col_idx) == Tile.Blue) {
+			board_state.state[row_idx][col_idx] = is_right_click ? Tile.Yellow : Tile.Empty;
+		} else if (board_state.at(row_idx, col_idx) == Tile.Empty) {
+			board_state.state[row_idx][col_idx] = is_right_click ? Tile.Blue : Tile.Yellow;
 		}
 	}
 
@@ -57,22 +56,22 @@
 
 <div
 	class={`flex flex-col h-full w-full justify-between ${
-		board_classes_per_size[board_state.length]
+		board_classes_per_size[board_state.size]
 	}`}
 	on:contextmenu|preventDefault
 >
-	{#each board_state as row, row_idx}
+	{#each board_state.state as row, row_idx}
 		<div
 			class={`flex flex-row w-full justify-between flex-1 ${
-				board_classes_per_size[board_state.length]
+				board_classes_per_size[board_state.size]
 			}`}
 		>
 			{#each row as tile, col_idx}
 				<div
 					class={`${
-						tile == 'y' ? 'bg-[#ffd700]' : tile == 'b' ? 'bg-[#0057b7]' : 'bg-neutral-700'
+						tile == Tile.Yellow ? 'bg-[#ffd700]' : tile == Tile.Blue ? 'bg-[#0057b7]' : 'bg-neutral-700'
 					} flex-1 ${
-						board_classes_per_size[board_state.length]
+						board_classes_per_size[board_state.size]
 					} shadow-lg transition-colors duration-200
 					${
 						!readonly &&
@@ -80,7 +79,7 @@
 							(
 								!can_edit_initial_state &&
 								initial_state !== null &&
-								initial_state[row_idx][col_idx] === 'x'
+								initial_state.at(row_idx, col_idx) === Tile.Empty
 							) 
 							|| can_edit_initial_state
 						)
@@ -91,7 +90,7 @@
 					on:click={() => click_handler(row_idx, col_idx, false)}
 					on:contextmenu|preventDefault={() => click_handler(row_idx, col_idx, true)}
 				>
-					{#if highlight_original && initial_state !== null && initial_state[row_idx][col_idx] !== 'x'}
+					{#if highlight_original && initial_state !== null && initial_state.at(row_idx, col_idx) !== Tile.Empty}
 						<svg
 							class="w-[40%] h-[40%] text-neutral-800 opacity-90"
 							xmlns="http://www.w3.org/2000/svg"
