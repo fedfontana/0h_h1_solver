@@ -26,14 +26,14 @@
 		value={content}
 	/>
 	<button
-		class="bg-neutral-200 px-3 rounded-r-md flex items-center content-center active:text-green-700"
+		class="bg-neutral-200 px-3 rounded-r-md flex items-center content-center"
 		on:click={copy_content}
 	>
 		<div class="hover:translate-y-[-3px] duration-200 relative">
 			{#if show_tooltip}
 				<span
 					transition:fade={{ duration: 200 }}
-					class="absolute top-6 right-[-32px] bg-neutral-700 text-neutral-100 px-3 py-1 rounded-md"
+					class="absolute top-8 right-[-32px] bg-neutral-700 text-neutral-100 px-3 py-1 rounded-md"
 					>COPIED</span
 				>
 			{/if}
