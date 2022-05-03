@@ -1,4 +1,4 @@
-import adapter from '@sveltejs/adapter-static';
+import adapter from '@sveltejs/adapter-netlify';
 import preprocess from 'svelte-preprocess';
 import path from 'path';
 
@@ -11,12 +11,7 @@ const config = {
     ],
 
     kit: {
-        /* prerender: {
-            default: true,
-        }, */
-        adapter: adapter({
-            fallback: 'index.html',
-        }),
+        adapter: adapter({}),
         vite: {
             resolve: {
                 alias: {
