@@ -5,7 +5,6 @@
 	import { goto } from '$app/navigation';
 
 	import { error_message, info_message, board_is_solution } from '$src/stores';
-
 	import Toast from '$components/toast.svelte';
 
 	$error_message = null;
@@ -14,10 +13,19 @@
 
 	onMount(() => {
 		window.onunhandledrejection = () => {
-			goto("/error");
-		}
-	})
+			goto('/error');
+		};
+	});
 </script>
+
+<svelte:head>
+	<script>
+		import { get } from '$app/stores';
+		import { initTheme, theme } from '$src/stores';
+		initTheme();
+		document.documentElement.classList.add(get(theme));
+	</script>
+</svelte:head>
 
 <div class="relative w-full flex flex-col py-12 md:w-8/12 mx-auto md:h-[95%]">
 	<nav class="mb-5 md:mb-0">
@@ -81,5 +89,14 @@
 	<slot />
 </div>
 <footer class="flex w-full justify-center text-center items-center pb-5 md:h-[5%]">
-	<p class="text-lg">made with 🧩 by <a class="text-blue-500 hover:underline decoration-2" href="https://fedfontana.dev">fedfontana</a>. Source code available on <a class="text-blue-500 hover:underline decoration-2" href="https://github.com/fedfontana/0h_h1_solver">github</a></p>
+	<p class="text-lg">
+		made with 🧩 by <a
+			class="text-blue-500 hover:underline decoration-2"
+			href="https://fedfontana.dev">fedfontana</a
+		>. Source code available on
+		<a
+			class="text-blue-500 hover:underline decoration-2"
+			href="https://github.com/fedfontana/0h_h1_solver">github</a
+		>
+	</p>
 </footer>

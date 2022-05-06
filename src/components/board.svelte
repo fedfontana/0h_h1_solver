@@ -46,11 +46,11 @@
 	}
 
 	const board_classes_per_size = {
-		'4': 'rounded-2xl md:rounded-3xl gap-2 md:gap-5',
-		'6': 'rounded-xl md:rounded-2xl gap-1 md:gap-4',
-		'8': 'rounded-[0.63rem] md:rounded-2xl gap-[0.2rem] md:gap-2',
-		'10': 'rounded-lg md:rounded-xl gap-[0.125rem] md:gap-2',
-		'12': 'rounded-md md:rounded-xl gap-[0.125rem] md:gap-1'
+		'4': 'rounded-2xl md:rounded-3xl gap-[2.3%]',
+		'6': 'rounded-xl md:rounded-2xl gap-[1.8%]',
+		'8': 'rounded-[0.63rem] md:rounded-2xl gap-[1.2%]',
+		'10': 'rounded-lg md:rounded-xl gap-[0.9%]',
+		'12': 'rounded-md md:rounded-xl gap-[0.7%]'
 	};
 </script>
 
